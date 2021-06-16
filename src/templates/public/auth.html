@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Ingresar{% endblock %}
+{% block content %}
+    <section id="signin-content">
+        <div class="container">
+            <div class="row g-0">
+                <div class="col-lg-8 d-flex mx-auto my-5">
+                    <div class="signin-content align-self-center justify-content-center mx-auto p-5">
+                        <div class="card px-3 my-5">
+                            <h5 class="card-header elegant-color white-text text-center py-4">
+                                <strong>Ingresar</strong>
+                            </h5>
+                            <div class="card-body px-lg-5 pt-0">
+                                <form class="text-center" style="color: #757575;" action="/" method="POST">
+                                    <div class="md-form">
+                                        <input type="text" name="email" id="materialLoginFormEmail" class="form-control" placeholder=" Example: mail@mail.com" aria-describedby="formEmail" autofocus required>
+                                        <label for="materialLoginFormEmail">Email</label>
+                                        <small id="formEmail" class="form-text text-muted mb-4">
+                                            *No incluir numeral
+                                        </small>
+                                    </div>
+                                    <div class="md-form">
+                                        <input type="password" name="password" id="materialLoginFormPassword" class="form-control" aria-describedby="formPassword" required>
+                                        <label for="materialLoginFormPassword">Contraseña</label>
+                                        <small id="formPassword" class="form-text text-muted mb-4">
+                                            Contraseña establecida
+                                        </small>
+                                    </div>
+                                    <button class="btn btn-outline-elegant btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">
+                                        Ingresar <i class="fas fa-sign-in-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

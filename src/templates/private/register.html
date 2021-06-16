@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar usuario{% endblock %}
+{% block content %}
+    <section id="signup">
+        <div class="container">
+            <div class="row g-0">
+                <div class="col-lg-6 d-flex">
+                    <div class="content-signup mx-auto align-self-center p-5 my-5">
+                        <div class="justify-content-center">
+                            <small class="d-block mb-3">
+                                <span class="badge bg-dark p-1 me-2">Registrar </span> usuario perteneciente a la empresa.
+                            </small>
+                            <h2 class="display-4 fw-bold mb-4">
+                                Registrar un usuario en el sistema
+                            </h2>
+                            <blockquote class="blockquote bq-primary">
+                                <p class="mb-4">Otorgar acceso a un(os) empleado(s) que hace(n) parte de su empresa.</p>
+                            </blockquote>
+                            <a href="javascript: history.go(-1)" class="btn btn-dark btn-sm">
+                                <i class="fas fa-undo-alt"></i> Volver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-flex">
+                    <div class="content-signup mx-auto align-self-center px-4 my-5">
+                        <div class="justify-content-center">
+                            <form class="text-center border border-light p-5" action="/register" method="POST">
+                                <div class="form-row mb-4">
+                                    <div class="col">
+                                        <input type="text" name="name" class="form-control" placeholder=" Nombre" required autofocus>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" name="last_name" class="form-control" placeholder=" Apellido" required>
+                                    </div>
+                                </div>
+                                <input type="email" name="email" class="form-control mb-4" placeholder=" E-mail" required>
+                                <input type="password" name="password" class="form-control" id="inputPassword" placeholder=" Contraseña" aria-describedby="inputPass" required>
+                                <small id="inputPass" class="form-text mb-4">Mínimo 8 caracteres combinando letras A, y, X y números.</small>
+                                <div class="form-row mb-4">
+                                    <div class="col-4">
+                                        <select name="id_type" class="browser-default custom-select" required>
+                                            <option selected>Tipo de documento</option>
+                                            <option value="TI">Tarjeta de Identidad</option>
+                                            <option value="CC">Cédula de Ciudadanía</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="text" name="identity" class="form-control" placeholder=" Número de documento" required>
+                                    </div>
+                                </div>
+                                <select name="role" class="browser-default custom-select mb-4">
+                                    <option selected>Rol del usuario</option>
+                                    <option value="Usuario">Usuario</option>
+                                    <option value="Administrador">Administrador</option>
+                                </select>
+                                <button class="btn btn-block btn-dark">
+                                    Registrar <i class="fas fa-user-plus"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

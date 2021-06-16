@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Usuario{% endblock %}
+{% block content %}
+    <section id="edit-user">
+        <div class="pt-3 px-3">
+            <a href="javascript: history.go(-1)" class="btn btn-dark btn-md">
+                <i class="fas fa-undo"></i> Volver
+            </a>
+        </div>
+        <div class="">
+            <div class="container">
+                <div class="row g-0">
+                    <div class="col-md-12 d-flex">
+                        <div class="edit-user-content mx-auto justify-content-center align-self-center my-auto p-5">
+                            <form class="text-center border border-light p-5" action="/edit/user/{{user.0}}" method="POST">
+                                <p class="h3 mb-3">Editar usuario</p>
+                                <div class="form-row mb-4">
+                                    <div class="col">
+                                        <input type="text" name="name" class="form-control" value="{{user.2}}" placeholder=" Nombre" autofocus>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" name="last_name" class="form-control" value="{{user.3}}" placeholder=" Apellido">
+                                    </div>
+                                </div>
+                                <input type="email" name="email" class="form-control mb-4" value="{{user.4}}" placeholder=" E-mail">
+                                <div class="form-row mb-4">
+                                    <div class="col-4">
+                                        <select name="id_type" class="browser-default custom-select">
+                                            <option value="{{user.1}}">{{user.1}}</option>
+                                            <option value="TI">Tarjeta de Identidad</option>
+                                            <option value="CC">Cédula de Ciudadanía</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="text" name="identity" class="form-control disabled" value="{{user.0}}" placeholder=" Número de documento" disabled>
+                                    </div>
+                                </div>
+                                <select name="role" class="browser-default custom-select mb-4 disabled" disabled>
+                                    <option value="{{user.6}}">{{user.6}}</option>
+                                    <option value="Usuario">Usuario</option>
+                                    <option value="Administrador">Administrador</option>
+                                </select>
+                                <button class="btn btn-block btn-dark">
+                                    Editar <i class="fas fa-user-cog"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,7 @@
+{
+    "settings": {
+        "session": {
+            "secret_key": "dev"
+        }
+    }
+}

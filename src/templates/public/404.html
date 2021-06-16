@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}404{% endblock %}
+{% block content %}
+    <section id="not-found">
+        <div class="container">
+            <div class="row g-0">
+                <div class="col-sm-6 d-flex">
+                    <div class="content-not-found mx-auto align-self-center my-auto p-5">
+                        <img src="{{ url_for('static', filename='images/404.png') }}" alt="Not found page" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex">
+                    <div class="content-not-found mx-auto align-self-center justify-content-center my-auto p-5">
+                        <small class="d-block mb-3">
+                            <span class="badge bg-warning p-1 me-2">ERROR</span> ruta no encontrada.
+                        </small>
+                        <p class="h2 display-4 font-weight-bold mb-4">
+                            La ruta no ha sido encontrada
+                        </p>
+                        <blockquote class="blockquote bq-warning bg-white">
+                            <p class="mb-4">{{error}}</p>
+                            <footer class="blockquote-footer mb-3">La ruta a la que intentas acceder no está contemplada en nuestro ámbito.</footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
