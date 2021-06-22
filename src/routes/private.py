@@ -7,5 +7,8 @@ private = {
     "logout_route": "/logout", "logout_controller": LogoutController.as_view("logout"),
     
     #user routes.
-    "user-edit_route": "/edit/user/<string:identity>", "user-edit_controller": UserController.as_view("user-edit")
+    "user-edit_route": "/edit/user/<string:identity>", "user-edit_controller": UserController.as_view("user-edit"),
+    
+    #Excel file.
+    "load_route": "/load", "load_controller": FileController.as_view("load")
 }

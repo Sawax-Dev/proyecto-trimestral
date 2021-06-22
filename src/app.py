@@ -23,6 +23,9 @@ app.add_url_rule(private["logout_route"], view_func=private["logout_controller"]
 
 #User routes
 app.add_url_rule(private["user-edit_route"], view_func=private["user-edit_controller"])
+
+#Excel file route.
+app.add_url_rule(private["load_route"], view_func=private["load_controller"])
 """ 
     Handle erros.
 """

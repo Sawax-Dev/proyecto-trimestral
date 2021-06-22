@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash
 from src.db import mysql
 from src.hooks.roleRequired import role_required
 from src.hooks.loginRequired import login_required
+from src.services.file_service import FileService
 
 class PrivateController(MethodView):
     @login_required
@@ -26,10 +27,28 @@ class ConfigurationController(MethodView):
     def post(self):
         return "Configurations post works!"
 
+#
+class FileController(MethodView):
+    
+    __fileSvc = FileService()
+    
+    def get(self):
+        pass
+    
+    @login_required
+    @role_required
+    def post(self):
+        file = self.__fileSvc.load()
+        if file is None:
+            flash("Ocurrió un error al mostrar la carga de los datos del archivo")
+            return redirect('/config')
+        return f"{file}"
+
 class UserController(MethodView):
     def get(self, identity):
         if("username" not in session):
             flash("Primero debe iniciar sesión")
+            return redirect('/')
         elif("Administrador" not in session['role']):
             flash("Sin autorización para acceder a la vista")
             return redirect('/config')
@@ -37,7 +56,6 @@ class UserController(MethodView):
             try:
                 cur.execute("SELECT * FROM users WHERE identity = %s", (identity))
                 user = cur.fetchone()
-                print(user)
             except:
                 flash("Ha ocurrido un error mientras intentabamos mostrar los datos")
             return render_template('private/user-edit.html', user=user)
@@ -45,6 +63,7 @@ class UserController(MethodView):
     def post(self, identity):
         if("username" not in session):
             flash("Primero debe iniciar sesión")
+            return 
         elif("Administrador" not in session['role']):
             flash("Sin autorización para acceder a la vista")
             return redirect('/config')
