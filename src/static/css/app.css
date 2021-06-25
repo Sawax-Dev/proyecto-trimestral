@@ -1,15 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
+@import url('config.css');
 
 :root {
-    --dark-color: rgb(24, 23, 23);
+    --dark-color: rgb(0, 0, 0);
+    --light-color: rgb(255, 255, 255);
+    --primary-color: rgb(60, 77, 124);
 }
 
 body {
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'Patua One', cursive;
 }
 
 body::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+body::-webkit-scrollbar:vertical {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-button:increment, body::-webkit-scrollbar-button {
     display: none;
+}
+
+body::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: var(--dark-color);
+    border-radius: 20px;
+    border: 2px solid #fff;
+}
+
+body::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+nav {
+    background-color: #fff;
+}
+
+.my-btn-black {
+    background-color: var(--dark-color);
+    color: white;
+    border-color: var(--dark-color);
+}
+
+.my-btn-black:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--light-color);
+}
+
+.my-text-green {
+    color: rgb(6, 66, 6);
 }
 
 .side-nav {

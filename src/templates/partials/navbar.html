@@ -1,59 +1,65 @@
-<header>
-    <nav class="navbar navbar-expand-sm navbar-light scrolling-navbar sticky-top" style="z-index: 250;">
-        <div class="container-fluid">
-            <div class="navbar-brand">
-                <a data-activates="slide-out" class="mr-4" onclick="openSideNav()" data-toggle="tooltip" title="Menú lateral">
-                    <i class="fas fa-bars fa-lg"></i>
-                </a>
+<nav class="navbar navbar-expand-sm navbar-light scrolling-navbar sticky-top" style="z-index: 250;">
+    <div class="container-fluid">
+        <div class="navbar-brand">
+            <a data-activates="slide-out" class="mr-4" onclick="openSideNav()" data-toggle="tooltip" title="Menú lateral">
+                <i class="fas fa-bars fa-lg"></i>
+            </a>
+            <a href="/panel">
                 <strong class="text-dark">
                     <span class="h3 font-weight-bold">App</span>
                 </strong>
-            </div>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
-                aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                <div class="navbar-nav ml-auto">
-                    {% if user %}
-                        <div class="navbar-text">
-                            <span class="user" data-toggle="tooltip" title="Usuario">
-                                <i class="far fa-user"></i>
-                                <span class="font-weight-bold">{{user}}</span>
-                            </span>
-                            <span class="base" data-toggle="tooltip" title="Base">
-                                <strong class="font-weight-bold">0$</strong>
-                            </span>
-                        </div>
-                        <a href="/logout" class="btn btn-dark btn-sm">
-                            <i class="fas fa-sign-out-alt"></i> Salir
-                        </a>
-                        <a href="/register" class="btn btn-dark btn-sm">
-                            <i class="fas fa-user-plus"></i> Registrar
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </nav>
-    <div id="slide-out" class="side-nav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
-        <div class="justify-content-center align-content-center text-center">
-            <img src="{{url_for('static', filename='images/logo.png')}}" height="100" class="rounded" alt="Logo de la app">
-        </div>
-        {% if session['role'] == 'Administrador' %}
-            <a href="/config">
-                <i class="fas fa-tools"></i> Administrar
             </a>
-        {% endif %}
-        <a href="#">
-            A link
-        </a>
-        <a href="#">
-            A link
-        </a>
-        <a href="#">
-            A link
-        </a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+            aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+            <div class="navbar-nav ml-auto">
+                {% if session['role'] == "Usuario" or session['role'] == "Administrador" %}
+                    <div class="navbar-text">
+                        <span class="user mr-2" data-toggle="tooltip" title="Usuario">
+                            <i class="far fa-user"></i>
+                            <span class="font-weight-bold">{{session['username']}}</span>
+                        </span>
+                        <span class="base mr-2" data-toggle="tooltip" title="Base">
+                            <strong class="font-weight-bold my-text-green">{{session['user_base'] or 'NA'}}$</strong>
+                        </span>
+                        <span class="box mr-2" data-toggle="tooltip" title="No. Caja">
+                            Caja No.<strong class="font-weight-bold text-danger"> {{session['user_register_number'] or 'NA'}}</strong>
+                        </span>
+                    </div>
+                    <a href="/logout" class="btn my-btn-black btn-sm" data-toggle="tooltip" title="Cerrar sesión">
+                        <i class="fas fa-sign-out-alt"></i> Salir
+                    </a>
+                    <a href="/config" class="btn my-btn-black btn-sm" data-toggle="tooltip" title="Configuración del sistema">
+                        <i class="fas fa-tools"></i> Configuración
+                    </a>
+                {% endif %}
+            </div>
+        </div>
     </div>
-</header>
+</nav>
+<div id="slide-out" class="side-nav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
+    <div class="justify-content-center align-content-center text-center">
+        <img src="{{url_for('static', filename='images/logo.png')}}" height="150" class="rounded" alt="Logo de la app">
+    </div>
+    {% if session['role'] == 'Administrador' %}
+        <a href="/register" data-toggle="tooltip" title="Registrar un usuario">
+            <i class="fas fa-user-plus"></i> Registrar
+        </a>
+        <a href="/load" data-toggle="tooltip" title="Cargar archivo Excel">
+            <i class="fas fa-file-excel"></i> Cargar Excel
+        </a>
+    {% endif %}
+    {% if session %}
+        <a href="#!">
+            A link
+        </a>
+    {% else %}
+        <a href="/contact">
+            <i class="fas fa-phone"></i> Contacto
+        </a>
+    {% endif %}
+</div>

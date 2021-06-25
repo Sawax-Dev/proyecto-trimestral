@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar productos{% endblock %}
+{% block content %}
+    <section id="add-products">
+        <div class="container-fluid">
+            <div class="row g-0">
+                <div class="col-lg-6 d-flex">
+                    <div class="content-add-products mx-auto align-self-center p-5 justify-content-center">
+                        <div class="card z-depth-5">
+                            <h5 class="card-header bg-dark white-text text-center py-4">
+                                <strong>Agregar productos</strong>
+                            </h5>
+                            <div class="card-body px-lg-5 pt-0">
+                                <form class="text-center" style="color: #757575;" action="/add/products" method="POST">
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <!-- CODE -->
+                                            <div class="md-form">
+                                                <input type="text" name="code" id="materialRegisterFormFirstName" class="form-control" placeholder=" #256" aria-describedby="describeCode" required autofocus>
+                                                <label for="materialRegisterFormFirstName">Código</label>
+                                                <small id="describeCode" class="form-text text-muted mb-4">
+                                                    *No incluir (#)
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <!-- NAME -->
+                                            <div class="md-form">
+                                                <input type="text" name="name" id="materialRegisterFormLastName" class="form-control" placeholder=" Arroz/papa.." required>
+                                                <label for="materialRegisterFormLastName">Nombre</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- COLUMNS -->
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <!-- STOCK -->
+                                            <div class="md-form">
+                                                <input type="number" name="stock" id="stockInput" class="form-control" placeholder="Eje. 10 o 50" required>
+                                                <label for="stockInput">Cantidad</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-5">
+                                            <!-- VALUE -->
+                                            <div class="md-form">
+                                                <input type="number" name="value" id="valueInput" class="form-control" placeholder="Eje. 10500" required>
+                                                <label for="valueInput">Valor unitario</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <!-- IVA -->
+                                            <div class="md-form">
+                                                <input type="number" name="iva" id="ivaInput" class="form-control" placeholder="Eje. 19%" aria-describedby="describeIva" required>
+                                                <label for="ivaInput">IVA</label>
+                                                <small id="describeIva" class="form-text text-muted mb-4">
+                                                    *Sin (%)
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <div class="md-form">
+                                                <select name="category" class="browser-default custom-select" id="categoryInput">
+                                                    <option selected> Seleccionar categoría</option>
+                                                    {% for category in categories %}
+                                                        <option value="{{category.0}}">{{category.1}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="md-form">
+                                                <input type="date" name="expiration_date" id="dateInput" class="form-control" required>
+                                                <label for="dateInput">Fecha de vencimiento</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="md-form">
+                                        <input type="number" name="discount" id="discountInput" class="form-control" placeholder="Ejemplo: 50%" aria-describedby="describeIva">
+                                        <label for="discountInput">Descuento</label>
+                                        <small id="describeIva" class="form-text text-muted mb-4">
+                                            *Opcional si hay descuento - *Sin (%)
+                                        </small>
+                                    </div>
+                                    <button class="btn btn-outline-dark btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                    <!--<hr>
+                                    <p>By clicking
+                                        <em>Sign up</em> you agree to our
+                                        <a href="" target="_blank">terms of service</a>
+                                    </p>-->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

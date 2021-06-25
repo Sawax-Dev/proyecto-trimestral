@@ -36,11 +36,27 @@
                                         <input type="text" name="identity" class="form-control disabled" value="{{user.0}}" placeholder=" Número de documento" disabled>
                                     </div>
                                 </div>
-                                <select name="role" class="browser-default custom-select mb-4 disabled" disabled>
-                                    <option value="{{user.6}}">{{user.6}}</option>
-                                    <option value="Usuario">Usuario</option>
-                                    <option value="Administrador">Administrador</option>
-                                </select>
+                                <div class="form-row mb-4">
+                                    <div class="col-6">
+                                        <select name="role" class="browser-default custom-select mb-4 disabled" disabled>
+                                            <option value="{{user.6}}">{{user.6}}</option>
+                                            <option value="Usuario">Usuario</option>
+                                            <option value="Administrador">Administrador</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <select name="register_number" class="browser-default custom-select mb-4">
+                                            <option selected>Aignada: Caja No.{{user.8 or 'NA'}}</option>
+                                            {% for item in cashInfo %}
+                                                <option value="{{item.0}}">Caja Nro. {{item.0}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <input type="number" name="base" class="form-control" value="{{user.9}}" placeholder=" Asignar/actualizar base" aria-describedby="describeBase">
+                                <small id="describeBase" class="form-text text-muted mb-4">Base asignada al usuario</small>
+
                                 <button class="btn btn-block btn-dark">
                                     Editar <i class="fas fa-user-cog"></i>
                                 </button>

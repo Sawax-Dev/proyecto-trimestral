@@ -5,14 +5,13 @@ class FileService:
 
     __filePath: str = "C:\\Users\\Swyme\\Desktop\\proyecto-semestral\\src\\services\\file\\products.xlsx"
 
-    def load(self):
+    def load(self) -> list:
         data: list = []
         try:
             xlsFile = pd.read_excel(
                 os.path.join(self.__filePath),
                 sheet_name='Inventario',
-                engine='openpyxl',
-                date_parser=''
+                engine='openpyxl'
             )
             data = xlsFile.values
         except:
