@@ -50,8 +50,7 @@ class FileController(MethodView):
             return redirect('/config')
         with mysql.cursor() as cur:
             for value in file:
-                data: list = value
-                values = (data[0], data[1], data[2], data[3], data[4], data[5], data[6])
+                values = (value[0], value[1], value[2], value[3], value[4], value[5], value[6])
                 try:
                     cur.execute("INSERT INTO products(code, name, stock, value, iva, category, expiration_date) VALUES(%s, %s, %s, %s, %s, %s, %s)", (values))
                     cur.connection.commit()
