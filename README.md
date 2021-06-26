@@ -60,7 +60,7 @@ Para contribuir en el proyecto se deben cumplir los criterios de:
 * **Brian Castro** - *Full stack developer* - [Swyme](https://github.com/Sawax-Dev)
 * **Anderson Méndez** - *Backend developer/Documentation* - [Anderson](https://github.com/Anderson735)
 
-Puedes revisar la lista de [contribuidores](https://github.com/Sawax-Dev/contributors) que participaron en este proyecto.
+Puedes revisar la lista de [contribuidores](https://github.com/Sawax-Dev/proyecto-trimestal/contributors) que participaron en este proyecto.
 
 ## Licencia
 
