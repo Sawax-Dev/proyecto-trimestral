@@ -14,7 +14,7 @@ class SigninController(MethodView):
             return redirect('/panel')
         email = request.form['email']
         password = request.form['password']
-        global user
+        user = []
         with mysql.cursor() as cur:
             try:
                 cur.execute("SELECT * FROM users WHERE email = %s", (email))

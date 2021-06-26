@@ -3,7 +3,7 @@
 {% block title %}Editar Usuario{% endblock %}
 {% block content %}
     <section id="edit-user">
-        <div class="pt-3 px-3">
+        <div class="pt-1 px-auto">
             <a href="javascript: history.go(-1)" class="btn btn-dark btn-md">
                 <i class="fas fa-undo"></i> Volver
             </a>
@@ -12,8 +12,8 @@
             <div class="container">
                 <div class="row g-0">
                     <div class="col-md-12 d-flex">
-                        <div class="edit-user-content mx-auto justify-content-center align-self-center my-auto p-5">
-                            <form class="text-center border border-light p-5" action="/edit/user/{{user.0}}" method="POST">
+                        <div class="edit-user-content mx-auto justify-content-center align-self-center my-auto">
+                            <form action="/edit/user/{{user.0}}" method="POST" class="text-center border border-light p-5 z-depth-5">
                                 <p class="h3 mb-3">Editar usuario</p>
                                 <div class="form-row mb-4">
                                     <div class="col">
@@ -39,24 +39,20 @@
                                 <div class="form-row mb-4">
                                     <div class="col-6">
                                         <select name="role" class="browser-default custom-select mb-4 disabled" disabled>
-                                            <option value="{{user.6}}">{{user.6}}</option>
+                                            <option value="{{user.5}}">{{user.5}}</option>
                                             <option value="Usuario">Usuario</option>
                                             <option value="Administrador">Administrador</option>
                                         </select>
                                     </div>
                                     <div class="col-6">
                                         <select name="register_number" class="browser-default custom-select mb-4">
-                                            <option selected>Aignada: Caja No.{{user.8 or 'NA'}}</option>
+                                            <option value="{{user.6}}" selected>Asignada: Caja Nro.{{user.6}}</option>
                                             {% for item in cashInfo %}
                                                 <option value="{{item.0}}">Caja Nro. {{item.0}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                 </div>
-
-                                <input type="number" name="base" class="form-control" value="{{user.9}}" placeholder=" Asignar/actualizar base" aria-describedby="describeBase">
-                                <small id="describeBase" class="form-text text-muted mb-4">Base asignada al usuario</small>
-
                                 <button class="btn btn-block btn-dark">
                                     Editar <i class="fas fa-user-cog"></i>
                                 </button>

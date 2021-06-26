@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de usuarios{% endblock %}
+{% block content %}
+    <section id="users-list">
+        <div class="container-fluid">
+            <div class="row g-0">
+                <div class="col-sm-12 d-flex">
+                    <div class="content-config align-self-center justify-content-center mx-auto my-5">
+                        <div class="search mb-2">
+                            <form action="/users" method="POST" class="form-inline">
+                                <input class="form-control form-control-sm ml-0 w-50" name="search" type="search" placeholder=" Buscar aquí..."
+                                    aria-label="Search" autofocus autocomplete="name">
+                                <button class="btn btn-dark btn-sm ml-0">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <table class="table table-striped w-auto text-center z-depth-5">
+                            <thead class="black white-text">
+                                <tr>
+                                    <th>
+                                        <i class="fas fa-id-card-alt"></i>
+                                        Documento
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-address-card"></i>
+                                        Tipo
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-file-signature"></i>
+                                        Nombre
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-signature"></i>
+                                        Apellido
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-at"></i>
+                                        E-mail
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-user-tag"></i>
+                                        Rol
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-calendar-alt"></i>
+                                        Registro
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-cash-register"></i>
+                                        No. Caja
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-cogs"></i>
+                                        Acciones
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <th scope="row">{{ user.0 }}</th>
+                                    <td>{{ user.2 }}</td>
+                                    <td>{{ user.1 }}</td>
+                                    <td>{{ user.3 }}</td>
+                                    <td>{{ user.4 }}</td>
+                                    <td>{{ user.5 }}</td>
+                                    <td>{{ user.6 }}</td>
+                                    <td>{{ user.7 or 'NA' }}</td>
+                                    <td class="d-inline-flex">
+                                        <a href="/edit/user/{{user.0}}" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-user-edit"></i>
+                                        </a>
+                                        <!--<a href="/delete/user/{{user.0}}" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>-->
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    No hay usuarios registrados
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot class="black text-white">
+                                <tr>
+                                    <th>Documento</th>
+                                    <th>Tipo</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>E-mail</th>
+                                    <th>Rol</th>
+                                    <th>Registro</th>
+                                    <th>No. Caja</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

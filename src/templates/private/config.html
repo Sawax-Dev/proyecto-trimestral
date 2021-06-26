@@ -2,125 +2,88 @@
 
 {% block title %}Configuración{% endblock %}
 {% block content %}
-<section id="config">
-    <div class="">
-        <div class="container-fluid">
-            <div class="row g-0">
-                <div class="col-lg-4 d-flex">
-                    <div class="content-config mx-auto align-self-center justify-content-center px-4 my-5">
-                        <div class="card testimonial-card text-center bg-dark z-depth-5">
-                            <div class="card-body">
-                                <div class="card-title text-white pt-3 px-5">
-                                    <p class="h3">
-                                        <span data-toggle="tooltip" title="Nombre">{{ user.0 }}</span>
-                                        <span data-toggle="tooltip" title="Apellido">{{ user.1 }}</span>
-                                    </p>
-                                    <p class="h5 text-muted" data-toggle="tooltip" title="Cargo">
-                                        {{ user.2 }}
-                                    </p>
+    <section id="config">
+        <div class="">
+            <div class="container">
+                <div class="row g-0">
+                    <div class="col-lg-4 d-flex">
+                        <div class="content-config mx-auto align-self-center justify-content-center p-5">
+                            <div class="card testimonial-card text-center bg-dark z-depth-5">
+                                <div class="card-body">
+                                    <div class="card-title text-white pt-3 px-5">
+                                        <p class="h3">
+                                            <span data-toggle="tooltip" title="Nombre">{{ user.0 }}</span>
+                                            <span data-toggle="tooltip" title="Apellido">{{ user.1 }}</span>
+                                        </p>
+                                        <p class="h5 text-muted" data-toggle="tooltip" title="Cargo">
+                                            {{ user.2 }}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="list-group">
-                                <a href="/config" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-eye"></i> Ver usuarios
-                                </a>
-                                <a href="#!" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-file-invoice"></i> Consultar facturas
-                                </a>
-                                <a href="/add/products" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-tags"></i> Agregar productos
-                                </a>
-                                <a href="javascript: history.go(-1)" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-undo"></i> Volver
-                                </a>
+                                <div class="list-group">
+                                    <a href="/users" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-eye"></i> Ver usuarios
+                                    </a>
+                                    <a href="#!" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-file-invoice"></i> Consultar facturas
+                                    </a>
+                                    <a href="/add/products" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-tags"></i> Agregar productos
+                                    </a>
+                                    <a href="javascript: history.go(-1)" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-undo"></i> Volver
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-8 d-flex">
-                    <div class="content-config align-self-center justify-content-center my-5">
-                        <div class="search mb-2">
-                            <form action="/config" method="POST" class="form-inline">
-                                <input class="form-control form-control-sm ml-0 w-50" name="search" type="search" placeholder=" Buscar aquí..."
-                                    aria-label="Search" autofocus autocomplete="name">
-                                <button class="btn btn-dark btn-sm ml-0">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </form>
+                    <div class="col-sm-8 d-flex">
+                        <div class="content-config align-self-center justify-content-center mx-auto my-5">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="card text-center z-depth-5 w-100">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Categorias</h4>
+                                            <p class="card-text">
+                                                Asigna, crea y gestiona las categorias del sistema.
+                                            </p>
+                                            <a href="/categories" class="btn btn-dark btn-sm">
+                                                Ver <i class="fas fa-arrow-alt-circle-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card text-center z-depth-5 w-100">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Registradoras</h4>
+                                            <p class="card-text">
+                                                Asigna y gestiona las cajas registradoras del sistema.
+                                            </p>
+                                            <a href="/cash-registers" class="btn btn-dark btn-sm">
+                                                Ver <i class="fas fa-arrow-alt-circle-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="card text-center z-depth-5 w-100">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Productos</h4>
+                                            <p class="card-text">
+                                                Visualiza, edita y elimina los productos del sistema.
+                                            </p>
+                                            <a href="/products" class="btn btn-dark btn-sm">
+                                                Ver <i class="fas fa-arrow-alt-circle-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <table class="table table-striped w-auto text-center z-depth-5">
-                            <thead class="black white-text">
-                                <tr>
-                                    <th>
-                                        <i class="fas fa-id-card-alt"></i>
-                                        Documento
-                                    </th>
-                                    <th>
-                                        <i class="fas fa-address-card"></i>
-                                        Tipo
-                                    </th>
-                                    <th>
-                                        <i class="fas fa-file-signature"></i>
-                                        Nombre
-                                    </th>
-                                    <th>
-                                        <i class="fas fa-signature"></i>
-                                        Apellido
-                                    </th>
-                                    <th>
-                                        <i class="fas fa-at"></i>
-                                        E-mail
-                                    </th>
-                                    <th>
-                                        <i class="fas fa-user-tag"></i>
-                                        Rol
-                                    </th>
-                                    <th>
-                                        <i class="fas fa-cogs"></i>
-                                        Acciones
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for user in users %}
-                                <tr>
-                                    <th scope="row">{{ user.0 }}</th>
-                                    <td>{{ user.2 }}</td>
-                                    <td>{{ user.1 }}</td>
-                                    <td>{{ user.3 }}</td>
-                                    <td>{{ user.4 }}</td>
-                                    <td>{{ user.5 }}</td>
-                                    <td class="d-inline-flex">
-                                        <a href="/edit/user/{{user.0}}" class="btn btn-sm btn-warning">
-                                            <i class="fas fa-user-edit"></i>
-                                        </a>
-                                        <!--<a href="/delete/user/{{user.0}}" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>-->
-                                    </td>
-                                </tr>
-                                {% else %}
-                                <tr>
-                                    No hay usuarios registrados
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                            <tfoot class="black text-white">
-                                <tr>
-                                    <th>Documento</th>
-                                    <th>Tipo</th>
-                                    <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>E-mail</th>
-                                    <th>Rol</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </tfoot>
-                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 {% endblock %}

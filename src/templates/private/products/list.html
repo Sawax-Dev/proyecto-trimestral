@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Productos{% endblock %}
+{% block content %}
+    <section id="products">
+        <div class="container">
+            <!-- FOOD -->
+            <div class="row g-0">
+                <div class="col-lg-12 d-flex">
+                    <div class="products-content justify-content-center align-items-center mx-auto my-5 w-100">
+                        <p class="h1 mb-2">
+                            Alimentos <i class="fas fa-utensils"></i>
+                        </p>
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-sm table-hover text-center">
+                                <thead class="black text-white">
+                                    <tr>
+                                        <th scope="col"><i class="fas fa-qrcode"></i> Código</th>
+                                        <th scope="col"><i class="fas fa-file-signature"></i> Nombre</th>
+                                        <th scope="col"><i class="fas fa-cubes"></i> Unidades</th>
+                                        <th scope="col"><i class="fas fa-dollar-sign"></i> Valor/U</th>
+                                        <th scope="col"><i class="fas fa-comments-dollar"></i> IVA</th>
+                                        <th scope="col"><i class="fas fa-calendar-times"></i> Fecha de vencimiento</th>
+                                        <th scope="col"><i class="fas fa-filter"></i> Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for f in food %}
+                                        <tr>
+                                            <td>{{f.0}}</td>
+                                            <td>{{f.1}}</td>
+                                            <td>{{f.2}}</td>
+                                            <td>{{f.3}}</td>
+                                            <td>{{f.4}}</td>
+                                            <td>{{f.5}}</td>
+                                            <td>
+                                                <a href="/edit/product/{{f.0}}" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            No se encontraron alimentos
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- DRINKS -->
+            <div class="row g-0">
+                <div class="col-lg-12 d-flex">
+                    <div class="products-content justify-content-center align-items-center mx-auto my-5 w-100">
+                        <p class="h1 mb-2">
+                            Bebidas <i class="fas fa-beer"></i>
+                        </p>
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-sm table-hover table-bordered text-center">
+                                <thead class="black text-white">
+                                    <tr>
+                                        <th scope="col"><i class="fas fa-qrcode"></i> Código</th>
+                                        <th scope="col"><i class="fas fa-file-signature"></i> Nombre</th>
+                                        <th scope="col"><i class="fas fa-cubes"></i> Unidades</th>
+                                        <th scope="col"><i class="fas fa-dollar-sign"></i> Valor/U</th>
+                                        <th scope="col"><i class="fas fa-comments-dollar"></i> IVA</th>
+                                        <th scope="col"><i class="fas fa-calendar-times"></i> Fecha de vencimiento</th>
+                                        <th scope="col"><i class="fas fa-filter"></i> Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for d in drinks %}
+                                        <tr>
+                                            <td>{{d.0}}</td>
+                                            <td>{{d.1}}</td>
+                                            <td>{{d.2}}</td>
+                                            <td>{{d.3}}</td>
+                                            <td>{{d.4}}</td>
+                                            <td>{{d.5}}</td>
+                                            <td>
+                                                <a href="/edit/product/{{d.0}}" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            No se encontraron bebidas
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- CLEANING -->
+            <div class="row g-0">
+                <div class="col-lg-12 d-flex">
+                    <div class="products-content justify-content-center align-items-center mx-auto my-5 w-100">
+                        <p class="h1 mb-2">
+                            Aseo <i class="fas fa-broom"></i>
+                        </p>
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-sm table-hover table-bordered text-center">
+                                <thead class="black text-white">
+                                    <tr>
+                                        <th scope="col"><i class="fas fa-qrcode"></i> Código</th>
+                                        <th scope="col"><i class="fas fa-file-signature"></i> Nombre</th>
+                                        <th scope="col"><i class="fas fa-cubes"></i> Unidades</th>
+                                        <th scope="col"><i class="fas fa-dollar-sign"></i> Valor/U</th>
+                                        <th scope="col"><i class="fas fa-comments-dollar"></i> IVA</th>
+                                        <th scope="col"><i class="fas fa-calendar-times"></i> Fecha de vencimiento</th>
+                                        <th scope="col"><i class="fas fa-filter"></i> Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in cleanings %}
+                                        <tr>
+                                            <td>{{c.0}}</td>
+                                            <td>{{c.1}}</td>
+                                            <td>{{c.2}}</td>
+                                            <td>{{c.3}}</td>
+                                            <td>{{c.4}}</td>
+                                            <td>{{c.5}}</td>
+                                            <td>
+                                                <a href="/edit/product/{{c.0}}" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            No se encontraron productos de aseo
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- SOME -->
+            <div class="row g-0">
+                <div class="col-lg-12 d-flex">
+                    <div class="products-content justify-content-center align-items-center mx-auto my-5 w-100">
+                        <p class="h1 mb-2">
+                            Varios <i class="fas fa-theater-masks"></i>
+                        </p>
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-sm table-hover table-bordered text-center">
+                                <thead class="black text-white">
+                                    <tr>
+                                        <th scope="col"><i class="fas fa-qrcode"></i> Código</th>
+                                        <th scope="col"><i class="fas fa-file-signature"></i> Nombre</th>
+                                        <th scope="col"><i class="fas fa-cubes"></i> Unidades</th>
+                                        <th scope="col"><i class="fas fa-dollar-sign"></i> Valor/U</th>
+                                        <th scope="col"><i class="fas fa-comments-dollar"></i> IVA</th>
+                                        <th scope="col"><i class="fas fa-calendar-times"></i> Fecha de vencimiento</th>
+                                        <th scope="col"><i class="fas fa-filter"></i> Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for s in some %}
+                                        <tr>
+                                            <td>{{s.0}}</td>
+                                            <td>{{s.1}}</td>
+                                            <td>{{s.2}}</td>
+                                            <td>{{s.3}}</td>
+                                            <td>{{s.4}}</td>
+                                            <td>{{s.5}}</td>
+                                            <td>
+                                                <a href="/edit/product/{{s.0}}" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            No se encontraron productos varios
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
