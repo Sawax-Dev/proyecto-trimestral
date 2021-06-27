@@ -2,11 +2,141 @@
 
 {% block title %}Panel{% endblock %}
 {% block content %}
-    <main id="panel">
-        <div class="">
-            <div class="container-fluid">
-                
+<main id="panel">
+    <div class="container-fluid">
+        <div class="panel-title px-5 pt-3">
+            <div class="container">
+                <div class="row d-flex align-items-center">
+                    <div class="col-lg-10">
+                        <p class="h3">Realizar facturación</p>
+                    </div>
+                    <div class="col-lg-2">
+                        <span>Base: {{data[1]}}</span>
+                    </div>
+                </div>
             </div>
         </div>
-    </main>
+        <div class="row g-0">
+            <div class="col-lg-4 d-flex">
+                <aside id="panel-content" class="justify-content-center align-self-center text-center mx-auto my-5">
+                    <div class="card z-depth-5">
+                        <h5 class="card-header bg-dark white-text text-center py-4">
+                            <strong>
+                                <i class="fas fa-cash-register fa-5x"></i>
+                            </strong>
+                        </h5>
+                        <div class="card-body px-lg-5 pt-0">
+                            <form class="text-center" style="color: #757575;" action="/panel" method="POST">
+                                <div class="md-form">
+                                    <input type="text" name="productCode" id="productCode" class="form-control" required autofocus>
+                                    <label for="productCode">Código del producto</label>
+                                </div>
+                                <div class="md-form">
+                                    <input type="number" name="productQuantity" id="productLength" class="form-control" required>
+                                    <label for="productLength">Cantidad</label>
+                                </div>
+                                <button class="btn btn-dark btn-rounded btn-sm my-4 waves-effect z-depth-3"
+                                    type="submit">
+                                    Agregar <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+            <div class="col-lg-8 d-flex">
+                <section id="panel-content"
+                    class="justify-content-center align-items-center align-self-center mx-auto my-auto">
+                    <p class="h4 font-weight-bold">Datos del comprador</p>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form action="/customer/add" method="POST">
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="inputIdType">Tipo de documento</label>
+                                        <select class="browser-default custom-select form-control" name="id_type"
+                                            id="inputIdType" required autofocus>
+                                            <option selected>Seleccionar</option>
+                                            <option value="CC">Cedula de ciudadanía</option>
+                                            <option value="TI">Tarjeta de identidad</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="inputId">No. documento</label>
+                                        <input type="text" class="form-control" name="id" id="inputId"
+                                            placeholder="Número de documento" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="validationCustomUsername">Teléfono</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroupPrepend">
+                                                    <i class="fas fa-phone"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="phone"
+                                                id="validationCustomUsername" placeholder="Número de telefono"
+                                                aria-describedby="inputGroupPrepend" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="inputName">Nombre(s)</label>
+                                        <input type="text" class="form-control" name="name" id="inputName"
+                                            placeholder="Nombre" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="inputLastname">Apellido(s)</label>
+                                        <input type="text" class="form-control" name="last_name" id="inputLastname"
+                                            placeholder="Apellido" required>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-dark btn-block" type="submit">
+                                    Agregar <i class="fas fa-user"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- PRODUCTS IN CART -->
+                    <p class="h4 font-weight-bold">Productos agregados</p>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm table-light border-dark text-center">
+                            <thead class="black text-white">
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Valor unitario</th>
+                                    <th scope="col">Valor total</th>
+                                    <th scope="col">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in details %}
+                                    <tr>
+                                        <td>{{product.0}}</td>
+                                        <td>{{product.1}}</td>
+                                        <td>{{product.3}}</td>
+                                        <td>{{product.2}}</td>
+                                        <td>{{product.2 * product.3}}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td>
+                                            No hay productos agregados a la tabla
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <caption>
+                                Listado de productos del cliente.
+                            </caption>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}

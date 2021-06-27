@@ -1,7 +1,7 @@
 from src.controllers.private import *
 
 private = {
-    "private_route": "/panel", "private_controller": PrivateController.as_view("private"),
+    "private_route": "/panel", "private_controller": PanelController.as_view("private"),
     "config_route": "/config", "config_controller": ConfigurationController.as_view("config"),
     
     #user routes.
@@ -9,6 +9,9 @@ private = {
     "user-edit_route": "/edit/user/<string:identity>", "user-edit_controller": UserEditController.as_view("user-edit"),
     "logout_route": "/logout", "logout_controller": LogoutUserController.as_view("logout"),
     "register_route": "/register", "register_controller": RegisterUserController.as_view("register"),
+    
+    #Customers routes.
+    "customer-add_route": "/customer/add", "customer-add_controller": CustomersAddController.as_view("customer-add"),
     
     #Excel file.
     "load_route": "/load", "load_controller": FileController.as_view("load"),

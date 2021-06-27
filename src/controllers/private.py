@@ -1,6 +1,5 @@
 from flask.views import MethodView
 from flask import request, render_template, redirect, session, flash
-from pymysql.connections import MySQLResult
 from werkzeug.security import generate_password_hash
 from src.db import mysql
 from src.hooks.roleRequired import role_required
@@ -8,10 +7,11 @@ from src.hooks.loginRequired import login_required
 from src.services.file_service import FileService
 
 #TODO://ERROR PARA RESOLVER EN CONSULTA SQL.
-class PrivateController(MethodView):
+class PanelController(MethodView):
     @login_required
     def get(self):
-        #data = []
+        data = []
+        details = []
         with mysql.cursor() as cur:
             try:
                 cur.execute(f"SELECT number, base FROM cash_register INNER JOIN users ON cash_register.number = users.register_number WHERE users.identity = '{session['user_id']}'")
@@ -19,9 +19,55 @@ class PrivateController(MethodView):
                 if(data):
                     session['user_register_number'] = data[0]
                     session['user_base'] = data[1]
+                cur.execute(f"SELECT code, name, unit_value, quantity FROM products INNER JOIN invoices_details ON products.code = invoices_details.product")
+                details = cur.fetchall()
+                print(details)
             except Exception as e:
                 flash(f'{e}', 'error')
-            return render_template('private/panel.html', data=data)
+            return render_template('private/panel.html', data=data, details=details)
+    
+    @login_required
+    def post(self):
+        #Add product to invoices_details.
+        code = request.form['productCode']
+        quantity: int = int(request.form['productQuantity'])
+        if quantity < 1:
+            flash('La cantidad del producto no puede ser menor que uno (1)', 'error')
+            return redirect(request.url)
+        
+        with mysql.cursor() as cur:
+            productData = []
+            try:
+                cur.execute("SELECT * FROM products WHERE code = %s", (code))
+                productData = cur.fetchone()
+                if(not productData):
+                    flash('No se encontraron productos con el código ingresado', 'error')
+                    return redirect(request.url)
+                cur.execute("INSERT INTO invoices_details(product, quantity, unit_value, total_iva) VALUES(%s, %s, %s, %s)", (productData[0], quantity, productData[3], productData[4]))
+                mysql.commit()
+                flash('El producto ha sido añadido a la tabla de productos agregados.', 'success')
+            except Exception as e:
+                flash("Un error ha ocurrido durante el procesamiento de datos", "error")
+            return redirect('/panel')
+
+class CustomersAddController(MethodView):
+    @login_required
+    def post(self):
+        #Add customer.
+        id = request.form['id']
+        idType = request.form['id_type']
+        phone = request.form['phone']
+        name = request.form['name']
+        last_name = request.form['last_name']
+        
+        with mysql.cursor() as cur:
+            try:
+                cur.execute("INSERT INTO customers VALUES(%s, %s, %s, %s, %s)", (id, name, last_name, idType, phone))
+                mysql.commit()
+                flash('Se ha agregado el comprador al proceso de facturación.', 'success')
+            except Exception as e:
+                flash("Un error ha ocurrido mientras se intentaba agregar al comprador en el proceso de facturación.", "error")
+            return redirect('/panel')
 
 #TODO://ERROR PARA RESOLVER EN MÉTODO GET
 class ConfigurationController(MethodView):
