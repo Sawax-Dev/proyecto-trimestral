@@ -17,7 +17,12 @@ app.add_url_rule(public["signin_route"], view_func=public["signin_controller"])
     Private routes
 """
 app.add_url_rule(private["private_route"], view_func=private["private_controller"])
+app.add_url_rule(private["panel-delete_route"], view_func=private["panel-delete_controller"])
+app.add_url_rule(private["invoicing_route"], view_func=private["invoicing_controller"])
 app.add_url_rule(private["config_route"], view_func=private["config_controller"])
+
+#Invoices routes.
+app.add_url_rule(private["invoices-list_route"], view_func=private["invoices-list_controller"])
 
 #User routes
 app.add_url_rule(private["user-list_route"], view_func=private["user-list_controller"])

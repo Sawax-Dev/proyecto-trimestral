@@ -2,7 +2,13 @@ from src.controllers.private import *
 
 private = {
     "private_route": "/panel", "private_controller": PanelController.as_view("private"),
+    "panel-delete_route": "/panel/delete/<int:id>", "panel-delete_controller": PanelDeleteController.as_view("panel-delete"),
+    "invoicing_route": "/invoicing/<string:uid>", "invoicing_controller": InvoicingController.as_view("invoicing"),
+    
     "config_route": "/config", "config_controller": ConfigurationController.as_view("config"),
+    
+    #Invoices routes.
+    "invoices-list_route": "/invoices", "invoices-list_controller": InvoicesListController.as_view("invoices-list"),
     
     #user routes.
     "user-list_route": "/users", "user-list_controller": UsersListController.as_view("user-list"),

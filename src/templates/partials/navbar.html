@@ -26,11 +26,14 @@
                             <strong class="font-weight-bold my-text-green">{{session['user_base'] or 'NA'}}$</strong>
                         </span>
                         <span class="box mr-2" data-toggle="tooltip" title="No. Caja">
-                            Caja No.<strong class="font-weight-bold text-danger"> {{session['user_register_number'] or 'NA'}}</strong>
+                            Caja <strong class="font-weight-bold text-danger">No ° {{session['user_register_number'] or 'NA'}}</strong>
                         </span>
                     </div>
                     <a href="/logout" class="btn my-btn-black btn-sm" data-toggle="tooltip" title="Cerrar sesión">
                         <i class="fas fa-sign-out-alt"></i> Salir
+                    </a>
+                    <a href="/panel" class="btn my-btn-black btn-sm" data-toggle="tooltip" title="Panel de pedidos">
+                        <i class="fas fa-store"></i> Panel
                     </a>
                     <a href="/config" class="btn my-btn-black btn-sm" data-toggle="tooltip" title="Configuración del sistema">
                         <i class="fas fa-tools"></i> Configuración

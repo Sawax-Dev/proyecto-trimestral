@@ -11,7 +11,7 @@
                         <p class="h3">Realizar facturación</p>
                     </div>
                     <div class="col-lg-2">
-                        <span>Base: {{data[1]}}</span>
+                        <span>Dinero actual: {{data[1]}}</span>
                     </div>
                 </div>
             </div>
@@ -26,17 +26,16 @@
                             </strong>
                         </h5>
                         <div class="card-body px-lg-5 pt-0">
-                            <form class="text-center" style="color: #757575;" action="/panel" method="POST">
+                            <form class="text-center" style="color: #757575;" action="/panel" method="POST" onsubmit="return productForm()">
                                 <div class="md-form">
                                     <input type="text" name="productCode" id="productCode" class="form-control" required autofocus>
                                     <label for="productCode">Código del producto</label>
                                 </div>
                                 <div class="md-form">
-                                    <input type="number" name="productQuantity" id="productLength" class="form-control" required>
+                                    <input type="number" name="productQuantity" id="productQuantity" class="form-control" required>
                                     <label for="productLength">Cantidad</label>
                                 </div>
-                                <button class="btn btn-dark btn-rounded btn-sm my-4 waves-effect z-depth-3"
-                                    type="submit">
+                                <button class="btn btn-dark btn-rounded btn-sm my-4 waves-effect z-depth-3" type="submit">
                                     Agregar <i class="fas fa-cart-plus"></i>
                                 </button>
                             </form>
@@ -63,8 +62,7 @@
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="inputId">No. documento</label>
-                                        <input type="text" class="form-control" name="id" id="inputId"
-                                            placeholder="Número de documento" required>
+                                        <input type="text" class="form-control" name="id" id="inputId" placeholder="Número de documento" required>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="validationCustomUsername">Teléfono</label>
@@ -74,22 +72,22 @@
                                                     <i class="fas fa-phone"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="phone"
-                                                id="validationCustomUsername" placeholder="Número de telefono"
-                                                aria-describedby="inputGroupPrepend" required>
+                                            <input type="text" class="form-control" name="phone" id="validationCustomUsername" placeholder="Número de telefono" aria-describedby="inputGroupPrepend" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-4 mb-3">
                                         <label for="inputName">Nombre(s)</label>
-                                        <input type="text" class="form-control" name="name" id="inputName"
-                                            placeholder="Nombre" required>
+                                        <input type="text" class="form-control" name="name" id="inputName" placeholder="Nombre" required>
                                     </div>
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-4 mb-3">
                                         <label for="inputLastname">Apellido(s)</label>
-                                        <input type="text" class="form-control" name="last_name" id="inputLastname"
-                                            placeholder="Apellido" required>
+                                        <input type="text" class="form-control" name="last_name" id="inputLastname" placeholder="Apellido" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="inputInvoice">Factura</label>
+                                        <input type="text" class="form-control" name="invoice" id="inputInvoice" placeholder="Código de factura" required>
                                     </div>
                                 </div>
                                 <button class="btn btn-outline-dark btn-block" type="submit">
@@ -101,7 +99,7 @@
                     <!-- PRODUCTS IN CART -->
                     <p class="h4 font-weight-bold">Productos agregados</p>
                     <div class="table-responsive">
-                        <table class="table table-hover table-sm table-light border-dark text-center">
+                        <table class="table table-hover table-sm border-dark text-center table-bordered">
                             <thead class="black text-white">
                                 <tr>
                                     <th scope="col">Código</th>
@@ -115,11 +113,18 @@
                             <tbody>
                                 {% for product in details %}
                                     <tr>
-                                        <td>{{product.0}}</td>
                                         <td>{{product.1}}</td>
-                                        <td>{{product.3}}</td>
                                         <td>{{product.2}}</td>
-                                        <td>{{product.2 * product.3}}</td>
+                                        <td>{{product.4}}</td>
+                                        <td>{{product.3}}</td>
+                                        <td>{{product.3 * product.4}}</td>
+                                        <td>
+                                            <form action="/panel/delete/{{product.0}}" method="POST">
+                                                <button class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 {% else %}
                                     <tr>
@@ -130,7 +135,13 @@
                                 {% endfor %}
                             </tbody>
                             <caption>
-                                Listado de productos del cliente.
+                                {% if details %}
+                                    <a href="/invoicing/{{invoice.0}}" class="btn btn-dark btn-block">
+                                        Procesar pedido
+                                    </a>
+                                {% else %}
+                                    Listado de productos del cliente.
+                                {% endif %}
                             </caption>
                         </table>
                     </div>

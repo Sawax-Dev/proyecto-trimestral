@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}Facturación{% endblock %}
+{% block content %}
+<section id="invoicing">
+    <div class="container-fluid">
+        <div class="row g-0">
+            <div class="col-lg-12 d-flex">
+                <div id="content-invoicing" class="justify-content-center align-items-center mx-auto my-5">
+                    <!-- INVOICE DATA -->
+                    <p class="h4 font-weight-bold">Datos del comprador</p>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form>
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="inputIdType">Tipo de documento</label>
+                                        <select class="browser-default custom-select form-control" name="id_type"
+                                            id="inputIdType" disabled>
+                                            <option value="{{invoiceData.9}}" selected>{{invoiceData.9}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="inputId">No. documento</label>
+                                        <input type="text" class="form-control" name="id" value="{{invoiceData.6}}"
+                                            id="inputId" placeholder="Número de documento" disabled>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="validationCustomUsername">Teléfono</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroupPrepend">
+                                                    <i class="fas fa-phone"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="phone"
+                                                value="{{invoiceData.10}}" id="validationCustomUsername"
+                                                placeholder="Número de telefono" aria-describedby="inputGroupPrepend"
+                                                disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="inputName">Nombre(s)</label>
+                                        <input type="text" class="form-control" name="name" value="{{invoiceData.7}}"
+                                            id="inputName" placeholder="Nombre" disabled>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="inputLastname">Apellido(s)</label>
+                                        <input type="text" class="form-control" name="last_name"
+                                            value="{{invoiceData.8}}" id="inputLastname" placeholder="Apellido"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="inputInvoice">Factura</label>
+                                        <input type="text" class="form-control" name="invoice" value="{{invoiceData.0}}"
+                                            id="inputInvoice" placeholder="Código de factura" disabled>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- SELLER DATA -->
+                    <p class="h4 font-weight-bold">Datos del vendedor</p>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form>
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="inputId">No. documento</label>
+                                        <input type="text" class="form-control" name="id" value="{{sellerData.0}}"
+                                            id="inputId" placeholder="Número de documento" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="inputName">Nombre</label>
+                                        <input type="text" class="form-control" name="name" value="{{sellerData.1}}"
+                                            id="inputName" placeholder="Nombre" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="inputLastname">Apellido</label>
+                                        <input type="text" class="form-control" name="last_name"
+                                            value="{{sellerData.2}}" id="inputLastname" placeholder="Apellido" disabled>
+                                    </div>
+                                    <div class="col-md-2 mb-3">
+                                        <label for="inputCashNumber">No. Caja</label>
+                                        <input type="text" class="form-control" name="cash_number"
+                                            value="{{sellerData.3}}" id="inputCashNumber" placeholder="Número de caja"
+                                            disabled>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ORDER DATA -->
+                    <p class="h4 font-weight-bold">Pedido</p>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm border-dark text-center table-bordered">
+                            <thead class="black text-white">
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Valor unitario</th>
+                                    <th scope="col">Valor total</th>
+                                    <!--<th scope="col">Acción</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in details %}
+                                <tr>
+                                    <td>{{product.1}}</td>
+                                    <td>{{product.2}}</td>
+                                    <td>{{product.4}}</td>
+                                    <td>{{product.3}}</td>
+                                    <td>{{product.3 * product.4}}</td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td>
+                                        Calculo total:
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        {{value.0}}
+                                    </td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        IVA:
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        {{iva.0}}
+                                    </td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Total
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        {{iva.0 + value.0}}
+                                    </td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <button type="button" class="btn btn-dark btn-block" data-toggle="modal"
+                                            data-target="#modalPoll-1">
+                                            Pagar
+                                        </button>
+                                    </td>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="modalPoll-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered modal-info modal-info" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="heading lead">
+                    Pagar pedido
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="fas fa-cash-register fa-4x mb-3 animated rotateIn"></i>
+                </div>
+                <form action="/invoicing/{{invoiceData.0}}" method="POST">
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="selectPay">Forma de pago</label>
+                            <select name="payment_type" id="selectPay" class="browser-default custom-select form-control">
+                                <option selected disabled>Seleccionar</option>
+                                <option value="1">Efectivo</option>
+                                <option value="2">Banco</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="inputTotalValue">Valor total</label>
+                            <input type="text" class="form-control" name="total" value="{{value.0 + iva.0}}" id="inputTotalValue">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="customerPay">Ingreso</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend">$</span>
+                                </div>
+                                <input type="number" class="form-control" name="customer_pay" id="customerPay" placeholder="Valor abonado" aria-describedby="inputGroupPrepend" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="inputDevuelta">Devuelta</label>
+                            <input type="text" class="form-control" name="devuelta" id="inputDevuelta" placeholder="Valor a devolver" onclick="refund()">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-block">
+                        Facturar
+                    </button>
+                </form>
+            </div>
+            <!--<div class="modal-footer justify-content-center">
+                <a type="button" class="btn btn-primary waves-effect waves-light">Send
+                    <i class="fa fa-paper-plane ml-1"></i>
+                </a>
+                <a type="button" class="btn btn-outline-primary waves-effect" data-dismiss="modal">Cancel</a>
+            </div>-->
+        </div>
+    </div>
+</div>
+<script>
+    const refund = () => {
+        let devuelta = document.getElementById('inputDevuelta');
+        let totalValue = document.getElementById('inputTotalValue').value;
+        let customerPay = document.getElementById('customerPay').value;
+        let result = eval(customerPay - totalValue);
+        devuelta.value = result;
+    }
+</script>
+{% endblock %}

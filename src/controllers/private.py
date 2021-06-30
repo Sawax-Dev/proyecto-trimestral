@@ -6,25 +6,27 @@ from src.hooks.roleRequired import role_required
 from src.hooks.loginRequired import login_required
 from src.services.file_service import FileService
 
-#TODO://ERROR PARA RESOLVER EN CONSULTA SQL.
 class PanelController(MethodView):
     @login_required
     def get(self):
-        data = []
-        details = []
         with mysql.cursor() as cur:
+            data = []
+            details = []
+            invoice = []
             try:
-                cur.execute(f"SELECT number, base FROM cash_register INNER JOIN users ON cash_register.number = users.register_number WHERE users.identity = '{session['user_id']}'")
+                cur.execute(f"SELECT number, current_money, base FROM cash_register INNER JOIN users ON cash_register.number = users.register_number WHERE users.identity = '{session['user_id']}'")
                 data = cur.fetchone()
                 if(data):
                     session['user_register_number'] = data[0]
-                    session['user_base'] = data[1]
-                cur.execute(f"SELECT code, name, unit_value, quantity FROM products INNER JOIN invoices_details ON products.code = invoices_details.product")
+                    session['user_base'] = data[2]
+                cur.execute(f"SELECT id, code, name, unit_value, quantity FROM products INNER JOIN cart_tmp ON products.code = cart_tmp.product")
                 details = cur.fetchall()
-                print(details)
+                if('customer' in session):
+                    cur.execute(f"SELECT uid FROM invoices WHERE customer = '{session['customer']}'")
+                    invoice = cur.fetchone()
             except Exception as e:
                 flash(f'{e}', 'error')
-            return render_template('private/panel.html', data=data, details=details)
+            return render_template('private/panel.html', data=data, details=details, invoice=invoice)
     
     @login_required
     def post(self):
@@ -37,18 +39,93 @@ class PanelController(MethodView):
         
         with mysql.cursor() as cur:
             productData = []
+            invoice = []
             try:
                 cur.execute("SELECT * FROM products WHERE code = %s", (code))
                 productData = cur.fetchone()
                 if(not productData):
                     flash('No se encontraron productos con el código ingresado', 'error')
                     return redirect(request.url)
-                cur.execute("INSERT INTO invoices_details(product, quantity, unit_value, total_iva) VALUES(%s, %s, %s, %s)", (productData[0], quantity, productData[3], productData[4]))
-                mysql.commit()
-                flash('El producto ha sido añadido a la tabla de productos agregados.', 'success')
+                if('customer' in session):
+                    cur.execute(f"SELECT uid FROM invoices WHERE customer = '{session['customer']}'")
+                    invoice = cur.fetchone()
+                    cur.execute("INSERT INTO cart_tmp(product, invoice, quantity, unit_value, total_iva) VALUES(%s, %s, %s, %s, %s)", (productData[0], invoice[0], quantity, productData[3], productData[4]))
+                    mysql.commit()
+                    flash('El producto ha sido añadido al carrito de compras.', 'success')
+                else:
+                    flash('Primero debe ingresar un comprador.', 'error')
             except Exception as e:
-                flash("Un error ha ocurrido durante el procesamiento de datos", "error")
+                flash(f"{e}", "error")
             return redirect('/panel')
+
+class InvoicingController(MethodView):
+    #@login_required
+    def get(self, uid):
+        with mysql.cursor() as cur:
+            invoiceData = []
+            sellerData = []
+            details = []
+            try:
+                cur.execute("SELECT * FROM invoices INNER JOIN customers WHERE invoices.uid = %s", (uid))
+                invoiceData = cur.fetchone()
+                cur.execute("SELECT identity, name, last_name, number, base FROM users INNER JOIN cash_register WHERE users.identity = %s", (session.get('user_id')))
+                sellerData = cur.fetchone()
+                cur.execute(f"SELECT id, code, name, unit_value, quantity, total_iva FROM products INNER JOIN cart_tmp ON products.code = cart_tmp.product")
+                details = cur.fetchall()
+                cur.execute(f"SELECT SUM(unit_value*quantity) FROM cart_tmp")
+                total_value = cur.fetchone()
+                cur.execute(f"SELECT SUM((unit_value * total_iva * quantity) / 100) FROM cart_tmp")
+                iva = cur.fetchone()
+            except Exception as e:
+                flash("Un error se ha generado durante la consulta de datos", "error")
+            return render_template('private/invoicing.html', invoiceData=invoiceData, sellerData=sellerData, details=details, value=total_value, iva=iva)
+    
+    #@login_required
+    def post(self, uid):
+        payment_type = request.form['payment_type']
+        total_value = float(request.form['total'])
+        customer_pay = float(request.form['customer_pay'])
+        refund = float(request.form['devuelta'])
+        print(payment_type, total_value, customer_pay, refund)
+        
+        with mysql.cursor() as cur:
+            try:
+                if(payment_type == 'efectivo'):
+                    pass
+                else:
+                    pass
+                cur.execute(f"SELECT invoice, product, quantity, unit_value, total_iva FROM cart_tmp WHERE invoice = '{uid}'")
+                invoice_details = cur.fetchall()
+                for i in invoice_details:
+                    cur.execute("INSERT INTO invoices_details(invoice, product, quantity, unit_value, total_iva, payment) VALUES(%s, %s, %s, %s, %s, %s)", (i[0], i[1], i[2], i[3], i[4], payment_type))
+                    mysql.commit()
+                    print(i)
+                cur.execute("SELECT SUM(unit_value * quantity) FROM invoices_details WHERE invoice = %s", (uid))
+                total = cur.fetchone()
+                cur.execute("SELECT SUM((unit_value * total_iva * quantity) / 100) FROM invoices_details WHERE invoice = %s", (uid))
+                iva = cur.fetchone()
+                cur.execute("UPDATE invoices SET total_value = %s, total_iva = %s WHERE uid = %s", (total, iva, uid))
+                mysql.commit()
+                cur.execute("UPDATE cash_register SET current_money = %s WHERE number = %s", (total_value-refund, session['user_register_number']))
+                mysql.commit()
+                #if(invoice_details):
+                cur.execute("DELETE FROM cart_tmp WHERE invoice = %s", (uid))
+                mysql.commit()
+                flash('La facturación se ha realizado correctamente', 'success')
+            except Exception as e:
+                flash(f"{e}", "error")
+            return redirect('/panel')
+
+class PanelDeleteController(MethodView):
+    def post(self, id):
+        with mysql.cursor() as cur:
+            try:
+                cur.execute("DELETE FROM cart_tmp WHERE id = %s", (id, ))
+                mysql.commit()
+                flash("El producto se ha eliminado del carrito.", "success")
+            except Exception as e:
+                flash("Un error ha ocurrido mientras intentabamos borrar el producto del carrito.", "error")
+        return redirect('/panel')
 
 class CustomersAddController(MethodView):
     @login_required
@@ -60,14 +137,41 @@ class CustomersAddController(MethodView):
         name = request.form['name']
         last_name = request.form['last_name']
         
+        #Invoices
+        invoice_uid = request.form['invoice']
+        seller = session.get('user_id')
+        
         with mysql.cursor() as cur:
             try:
                 cur.execute("INSERT INTO customers VALUES(%s, %s, %s, %s, %s)", (id, name, last_name, idType, phone))
                 mysql.commit()
-                flash('Se ha agregado el comprador al proceso de facturación.', 'success')
+                cur.execute("INSERT INTO invoices(uid, seller, customer) VALUES(%s, %s, %s)", (invoice_uid, seller, id))
+                mysql.commit()
+                session['invoice'] = invoice_uid
+                session['customer'] = id
+                flash(f'El comprador ha sido agregado. Código de factura. {invoice_uid}', 'success')
             except Exception as e:
-                flash("Un error ha ocurrido mientras se intentaba agregar al comprador en el proceso de facturación.", "error")
+                flash(f"{e}", "error")
             return redirect('/panel')
+
+#Invoices controller.
+class InvoicesListController(MethodView):
+    @login_required
+    def get(self):
+        with mysql.cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM invoices")
+                invoices = cur.fetchall()
+                pass
+            except Exception as e:
+                pass
+            return render_template('private/invoices/list.html')
+    
+    @login_required
+    def post(self):
+        pass
+
+#End invoices controller.
 
 #TODO://ERROR PARA RESOLVER EN MÉTODO GET
 class ConfigurationController(MethodView):
