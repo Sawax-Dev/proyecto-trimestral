@@ -18,27 +18,58 @@
         </div>
         <div class="row g-0">
             <div class="col-lg-4 d-flex">
-                <aside id="panel-content" class="justify-content-center align-self-center text-center mx-auto my-5">
-                    <div class="card z-depth-5">
+                <aside id="panel-content" class="justify-content-center align-self-center text-center mx-auto my-3">
+                    <div class="card z-depth-5 mb-3">
                         <h5 class="card-header bg-dark white-text text-center py-4">
                             <strong>
                                 <i class="fas fa-cash-register fa-5x"></i>
                             </strong>
                         </h5>
                         <div class="card-body px-lg-5 pt-0">
-                            <form class="text-center" style="color: #757575;" action="/panel" method="POST" onsubmit="return productForm()">
+                            <form class="text-center" style="color: #757575;" action="/panel" method="POST"
+                                onsubmit="return productForm()">
                                 <div class="md-form">
-                                    <input type="text" name="productCode" id="productCode" class="form-control" required autofocus>
+                                    <input type="text" name="productCode" id="productCode" class="form-control" required
+                                        autofocus>
                                     <label for="productCode">Código del producto</label>
                                 </div>
                                 <div class="md-form">
-                                    <input type="number" name="productQuantity" id="productQuantity" class="form-control" required>
+                                    <input type="number" name="productQuantity" id="productQuantity"
+                                        class="form-control" required>
                                     <label for="productLength">Cantidad</label>
                                 </div>
-                                <button class="btn btn-dark btn-rounded btn-sm my-4 waves-effect z-depth-3" type="submit">
+                                <button class="btn btn-dark btn-rounded btn-sm my-4 waves-effect z-depth-3"
+                                    type="submit">
                                     Agregar <i class="fas fa-cart-plus"></i>
                                 </button>
                             </form>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
+                        Cerrar caja
+                    </button>
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header text-center">
+                                    <h3 class="modal-title text-center" id="exampleModalLongTitle">Cerrar caja</h3>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="text-center p-5" action="/close/cash-register" method="POST">
+                                        <input type="date" name="date" id="inputDate" class="form-control" placeholder=" Fecha de cierre" aria-describedby="descriptionDate">
+                                        <small id="descriptionDate" class="form-text text-muted mb-4">
+                                            <span class="text-warning">*</span>Asignar en el cuadro de texto la fecha de <b>cierre.</b>
+                                        </small>
+                                        <button class="btn btn-dark my-4 btn-block" type="submit">
+                                            Enviar <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </aside>
@@ -62,7 +93,8 @@
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="inputId">No. documento</label>
-                                        <input type="text" class="form-control" name="id" id="inputId" placeholder="Número de documento" required>
+                                        <input type="text" class="form-control" name="id" id="inputId"
+                                            placeholder="Número de documento" required>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="validationCustomUsername">Teléfono</label>
@@ -72,22 +104,27 @@
                                                     <i class="fas fa-phone"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="phone" id="validationCustomUsername" placeholder="Número de telefono" aria-describedby="inputGroupPrepend" required>
+                                            <input type="text" class="form-control" name="phone"
+                                                id="validationCustomUsername" placeholder="Número de telefono"
+                                                aria-describedby="inputGroupPrepend" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                         <label for="inputName">Nombre(s)</label>
-                                        <input type="text" class="form-control" name="name" id="inputName" placeholder="Nombre" required>
+                                        <input type="text" class="form-control" name="name" id="inputName"
+                                            placeholder="Nombre" required>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="inputLastname">Apellido(s)</label>
-                                        <input type="text" class="form-control" name="last_name" id="inputLastname" placeholder="Apellido" required>
+                                        <input type="text" class="form-control" name="last_name" id="inputLastname"
+                                            placeholder="Apellido" required>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="inputInvoice">Factura</label>
-                                        <input type="text" class="form-control" name="invoice" id="inputInvoice" placeholder="Código de factura" required>
+                                        <input type="text" class="form-control" name="invoice" id="inputInvoice"
+                                            placeholder="Código de factura" required>
                                     </div>
                                 </div>
                                 <button class="btn btn-outline-dark btn-block" type="submit">
@@ -112,35 +149,35 @@
                             </thead>
                             <tbody>
                                 {% for product in details %}
-                                    <tr>
-                                        <td>{{product.1}}</td>
-                                        <td>{{product.2}}</td>
-                                        <td>{{product.4}}</td>
-                                        <td>{{product.3}}</td>
-                                        <td>{{product.3 * product.4}}</td>
-                                        <td>
-                                            <form action="/panel/delete/{{product.0}}" method="POST">
-                                                <button class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>{{product.1}}</td>
+                                    <td>{{product.2}}</td>
+                                    <td>{{product.4}}</td>
+                                    <td>{{product.3}}</td>
+                                    <td>{{product.3 * product.4}}</td>
+                                    <td>
+                                        <form action="/panel/delete/{{product.0}}" method="POST">
+                                            <button class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
                                 {% else %}
-                                    <tr>
-                                        <td>
-                                            No hay productos agregados a la tabla
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>
+                                        No hay productos agregados a la tabla
+                                    </td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                             <caption>
                                 {% if details %}
-                                    <a href="/invoicing/{{invoice.0}}" class="btn btn-dark btn-block">
-                                        Procesar pedido
-                                    </a>
+                                <a href="/invoicing/{{invoice.0}}" class="btn btn-dark btn-block">
+                                    Procesar pedido
+                                </a>
                                 {% else %}
-                                    Listado de productos del cliente.
+                                Listado de productos del cliente.
                                 {% endif %}
                             </caption>
                         </table>

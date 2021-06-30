@@ -4,7 +4,7 @@ private = {
     "private_route": "/panel", "private_controller": PanelController.as_view("private"),
     "panel-delete_route": "/panel/delete/<int:id>", "panel-delete_controller": PanelDeleteController.as_view("panel-delete"),
     "invoicing_route": "/invoicing/<string:uid>", "invoicing_controller": InvoicingController.as_view("invoicing"),
-    
+    "close-box_route": "/close/cash-register", "close-box_controller": CloseBoxController.as_view("close-box"),
     "config_route": "/config", "config_controller": ConfigurationController.as_view("config"),
     
     #Invoices routes.

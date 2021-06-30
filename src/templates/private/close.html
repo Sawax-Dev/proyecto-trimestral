@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Cerrar caja{% endblock %}
+{% block content %}
+<section id="close-cash-register">
+    <div class="container-fluid">
+        <div class="row g-0 text-center">
+            <div class="col-lg-4 d-flex">
+                <div id="content-close-cash-register" class="justify-content-center align-items-center mx-auto my-5">
+                    <p class="h2">Valor efectivo:</p>
+                    <div id="details">
+                        <p>Vendido: {{sell_value.0}}</p>
+                        <p>Base: {{session['user_base']}}</p>
+                        <p>Total ganancia = {{sell_value.0 - session['user_base']}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 d-flex">
+                <div id="content-close-cash-register" class="justify-content-center align-items-center mx-auto my-5">
+                    <p class="h2">Valor tarjetas:</p>
+                    <div id="details">
+                        <p>Vendido: </p>
+                        <p>Total ganancia = </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 d-flex">
+                <div id="content-close-cash-register" class="justify-content-center align-items-center mx-auto my-5">
+                    <p class="h2">Total de venta:</p>
+                    <div id="details">
+                        <p class="my-text-green">{{total.0}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

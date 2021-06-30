@@ -2,15 +2,63 @@
 
 {% block title %}Facturas{% endblock %}
 {% block content %}
-    <section id="invoices">
-        <div class="container">
-            <div class="row g-0">
-                <div class="col-lg-12 d-flex">
-                    <div id="content-invoices" class="justify-content-center align-items-center mx-auto my-5">
-                        
+<section id="invoices">
+    <div class="container">
+        <form action="/invoices" method="POST" class="form-inline mt-4">
+            <input class="form-control form-control-sm ml-0 w-25" name="search" type="search" placeholder=" Buscar por vendedor/fecha..." aria-label="Search" autofocus autocomplete="name">
+            <button class="btn btn-dark btn-sm ml-0">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="input-group-prepend ml-3">
+                <span class="input-group-text">Desde</span>
+            </div>
+            <input type="date" name="date_start" aria-label="Fecha inicial" class="form-control">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Hasta</span>
+            </div>
+            <input type="date" name="date_end" aria-label="Fecha final" class="form-control">
+        </form>
+        <div class="row g-0">
+            {% for invoice in invoices %}
+            <div class="col-lg-4 d-flex">
+                <div id="content-invoices" class="justify-content-center align-items-center mx-auto my-5">
+                    
+                    <div class="card z-depth-5 mb-3 text-center">
+                        <div class="card-header bg-dark text-white">
+                            Factura: {{invoice.0}}
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">Vendedor: {{invoice.6}} {{invoice.7}} - <span class="text-danger">{{invoice.8}}</span></h4>
+                            <div class="row">
+                                <div class="col">
+                                    <p>Valor: {{invoice.4}}</p>
+                                </div>
+                                <div class="col">
+                                    <p>IVA: {{invoice.5}}</p>
+                                </div>
+                                <div class="col">
+                                    <p>Valor total: <span class="my-text-green">{{invoice.4 + invoice.5}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col">
+                                    <p>Fecha: {{invoice.1}}</p>
+                                </div>
+                                <!--<div class="col">
+                                    <a href="/invoices/cancel/{{invoice.0}}" class="btn btn-warning">
+                                        <i class="fas fa-window-close"></i>
+                                    </a>
+                                </div>-->
+                            </div>
+                        </div>
                     </div>
+                    
                 </div>
             </div>
+            {% endfor %}
         </div>
-    </section>
+    </div>
+</section>
 {% endblock %}

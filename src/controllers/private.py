@@ -51,6 +51,7 @@ class PanelController(MethodView):
                     invoice = cur.fetchone()
                     cur.execute("INSERT INTO cart_tmp(product, invoice, quantity, unit_value, total_iva) VALUES(%s, %s, %s, %s, %s)", (productData[0], invoice[0], quantity, productData[3], productData[4]))
                     mysql.commit()
+                    cur.execute("UPDATE products SET stock = %s WHERE code = %s", (productData[2]-quantity, code))
                     flash('El producto ha sido añadido al carrito de compras.', 'success')
                 else:
                     flash('Primero debe ingresar un comprador.', 'error')
@@ -99,22 +100,45 @@ class InvoicingController(MethodView):
                 for i in invoice_details:
                     cur.execute("INSERT INTO invoices_details(invoice, product, quantity, unit_value, total_iva, payment) VALUES(%s, %s, %s, %s, %s, %s)", (i[0], i[1], i[2], i[3], i[4], payment_type))
                     mysql.commit()
-                    print(i)
                 cur.execute("SELECT SUM(unit_value * quantity) FROM invoices_details WHERE invoice = %s", (uid))
                 total = cur.fetchone()
                 cur.execute("SELECT SUM((unit_value * total_iva * quantity) / 100) FROM invoices_details WHERE invoice = %s", (uid))
                 iva = cur.fetchone()
                 cur.execute("UPDATE invoices SET total_value = %s, total_iva = %s WHERE uid = %s", (total, iva, uid))
                 mysql.commit()
-                cur.execute("UPDATE cash_register SET current_money = %s WHERE number = %s", (total_value-refund, session['user_register_number']))
+                cur.execute("UPDATE cash_register SET current_money += %s WHERE number = %s", (total_value-refund, session['user_register_number']))
                 mysql.commit()
-                #if(invoice_details):
-                cur.execute("DELETE FROM cart_tmp WHERE invoice = %s", (uid))
-                mysql.commit()
+                if(invoice_details):
+                    cur.execute("DELETE FROM cart_tmp WHERE invoice = %s", (uid))
+                    mysql.commit()
                 flash('La facturación se ha realizado correctamente', 'success')
             except Exception as e:
                 flash(f"{e}", "error")
             return redirect('/panel')
+
+class CloseBoxController(MethodView):
+    @login_required
+    @role_required
+    def post(self):
+        date = request.form['date']
+        
+        with mysql.cursor() as cur:
+            sell_value = []
+            total = []
+            try:
+                #Efectivo.
+                cur.execute(f"SELECT payment FROM invoices_details WHERE payment = 1")
+                payment_type = cur.fetchall()
+                if(payment_type):
+                    cur.execute(f"SELECT SUM(total_value + total_iva) FROM invoices WHERE date LIKE '%{date}%'")
+                    sell_value = cur.fetchone()
+                #Total de todo.
+                cur.execute(f"SELECT SUM(total_value + total_iva) FROM invoices WHERE date LIKE '%{date}%'")
+                total = cur.fetchone()
+                print(total)
+            except Exception as e:
+                flash(f"{e}", "error")
+            return render_template('private/close.html', sell_value=sell_value, total=total)
 
 class PanelDeleteController(MethodView):
     def post(self, id):
@@ -159,17 +183,44 @@ class InvoicesListController(MethodView):
     @login_required
     def get(self):
         with mysql.cursor() as cur:
+            invoices = []
             try:
-                cur.execute("SELECT * FROM invoices")
+                cur.execute("SELECT invoices.*, users.name, users.last_name, users.role FROM invoices INNER JOIN users ON invoices.seller = users.identity")
                 invoices = cur.fetchall()
-                pass
+                cur.execute("SELECT name, last_name FROM invoices INNER JOIN customers ON invoices.customer = customers.id")
+                customers = cur.fetchall()
             except Exception as e:
-                pass
-            return render_template('private/invoices/list.html')
+                flash(f"{e}", "error")
+            return render_template('private/invoices/list.html', invoices=invoices, customers=customers)
     
     @login_required
     def post(self):
-        pass
+        search = request.form['search']
+        date_start = request.form['date_start']
+        date_end = request.form['date_end']
+        print(date_start, date_end)
+        
+        with mysql.cursor() as cur:
+            try:
+                cur.execute(f"SELECT invoices.*, users.name, users.last_name, users.role FROM invoices INNER JOIN users ON invoices.seller = users.identity WHERE invoices.date BETWEEN '{date_start}' AND '{date_end}'")
+                resultByDateToDate = cur.fetchall()
+                if(resultByDateToDate):
+                    flash(f"Los resultados desde {date_start} hasta {date_end} son...", "success")
+                    return render_template('private/invoices/list.html', invoices=resultByDateToDate)
+                cur.execute(f"SELECT invoices.*, users.name, users.last_name, users.role FROM invoices INNER JOIN users ON invoices.seller = users.identity WHERE users.name LIKE'%{search}%'")
+                result = cur.fetchall()
+                if(result):
+                    flash(f"Los resultados de la búsqueda por el vendedor {search} son...", "success")
+                    return render_template('private/invoices/list.html', invoices=result)
+                cur.execute(f"SELECT invoices.*, users.name, users.last_name, users.role FROM invoices INNER JOIN users ON invoices.seller = users.identity WHERE invoices.date LIKE'%{search}%'")
+                resultByDate = cur.fetchall()
+                if(resultByDate):
+                    flash(f"Los resultados de la búsqueda por la fecha {search} son...", "success")
+                    return render_template('private/invoices/list.html', invoices=resultByDate)
+            except Exception as e:
+                flash(f"{e}", "error")
+            flash("No se encontraron resultados..", "error")
+            return redirect('/invoices')
 
 #End invoices controller.
 
