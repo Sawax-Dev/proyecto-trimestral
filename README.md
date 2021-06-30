@@ -31,15 +31,27 @@ Paso 2. Installar los paquetes del proyecto.
 pip install pandas, flask, pymysql
 ```
 
-Paso 3. Arrancar el archivo main.py (raíz del proyecto).
+Paso 3. Correr el entorno virtual.
 ```
-py main.py
+Abrir consola de powershell
+>venv/Scripts/activate
 ```
 
-Paso 4. Configurar la conexión de la base de datos en el archivo db.py.
+Paso 4. Importar la base de datos ubicada en la carpeta raíz [db-proyecto-trimestral](https://github.com/Sawax-Dev/proyecto-trimestral/tree/main/database)
+```
+Abrir gestor de base de datos.
+Importar archivo de base de datos.
+```
+
+Paso 5. Configurar la conexión de la base de datos en el archivo [db.py].
 ```
 Abrir src/db.py
 pymysql.connect(host='YOUR HOST', port=3306, user='YOUR USER', passwd='YOUR PASSWORD', db='YOUR DATABASE')
+```
+
+Paso 6. Arrancar el archivo [main.py] (raíz del proyecto).
+```
+py main.py
 ```
 
 ## Construido con
@@ -59,8 +71,9 @@ Para contribuir en el proyecto se deben cumplir los criterios de:
 
 * **Brian Castro** - *Full stack developer* - [Swyme](https://github.com/Sawax-Dev)
 * **Anderson Méndez** - *Backend developer/Documentation* - [Anderson](https://github.com/Anderson735)
+* **Santiago Arias** - *Backend developer* - [ElSanti](https://github.com/Elsant-i)
 
-Puedes revisar la lista de [contribuidores](https://github.com/Sawax-Dev/proyecto-trimestal/contributors) que participaron en este proyecto.
+Puedes revisar la lista de [contribuidores](https://github.com/Sawax-Dev/proyecto-trimestral/contributors) que participaron en este proyecto.
 
 ## Licencia
 
