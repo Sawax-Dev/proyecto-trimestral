@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-06-2021 a las 22:00:27
+-- Tiempo de generación: 02-07-2021 a las 10:57:54
 -- Versión del servidor: 10.4.19-MariaDB
 -- Versión de PHP: 8.0.6
 
@@ -31,6 +31,14 @@ CREATE TABLE `bank` (
   `id` char(10) NOT NULL,
   `name` varchar(70) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `bank`
+--
+
+INSERT INTO `bank` (`id`, `name`) VALUES
+('B-3664', 'Bancolombia'),
+('B-4738', 'Davivienda');
 
 -- --------------------------------------------------------
 
@@ -65,8 +73,9 @@ CREATE TABLE `cash_register` (
 --
 
 INSERT INTO `cash_register` (`number`, `current_money`, `base`, `date`) VALUES
-(1, 5000, 5000, '2021-06-24 01:13:26'),
-(2, 7500, 7500, '2021-06-24 19:47:20');
+(1, 2000, 15000, '2021-06-24 01:13:26'),
+(2, 7500, 30000, '2021-06-24 19:47:20'),
+(3, 0, 10000, '2021-07-02 08:40:12');
 
 -- --------------------------------------------------------
 
@@ -104,6 +113,15 @@ CREATE TABLE `customers` (
   `phone` char(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `customers`
+--
+
+INSERT INTO `customers` (`id`, `name`, `last_name`, `id_type`, `phone`) VALUES
+('10000', 'Lolita', 'Pérez', 'CC', '1111111111'),
+('20000', 'Paquito', 'Zapata', 'TI', '22222222'),
+('30000', 'Rosa', 'Melano', 'CC', '3333333333');
+
 -- --------------------------------------------------------
 
 --
@@ -112,12 +130,23 @@ CREATE TABLE `customers` (
 
 CREATE TABLE `invoices` (
   `uid` char(10) NOT NULL,
-  `date` date NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp(),
   `seller` char(20) DEFAULT NULL,
   `customer` char(20) DEFAULT NULL,
   `total_value` float DEFAULT 0,
-  `total_iva` float DEFAULT 0
+  `total_iva` float DEFAULT 0,
+  `payment_type` set('efectivo','tarjeta') DEFAULT 'efectivo',
+  `bank` char(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `invoices`
+--
+
+INSERT INTO `invoices` (`uid`, `date`, `seller`, `customer`, `total_value`, `total_iva`, `payment_type`, `bank`) VALUES
+('A-1', '2021-07-02', '41945032', '10000', 55200, 0, 'efectivo', NULL),
+('A-2', '2021-07-02', '41945032', '20000', 2975, 475, 'tarjeta', 'B-3664'),
+('A-3', '2021-07-02', '41945032', '30000', 8000, 0, 'tarjeta', 'B-4738');
 
 -- --------------------------------------------------------
 
@@ -131,29 +160,23 @@ CREATE TABLE `invoices_details` (
   `product` int(4) UNSIGNED ZEROFILL DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `unit_value` float DEFAULT NULL,
-  `total_iva` float DEFAULT NULL,
-  `payment` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `payment_type`
---
-
-CREATE TABLE `payment_type` (
-  `code` int(11) NOT NULL,
-  `pay` set('efectivo','tarjeta') NOT NULL DEFAULT 'efectivo',
-  `bank` char(10) DEFAULT NULL
+  `total_iva` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `payment_type`
+-- Volcado de datos para la tabla `invoices_details`
 --
 
-INSERT INTO `payment_type` (`code`, `pay`, `bank`) VALUES
-(1, 'efectivo', NULL),
-(2, 'tarjeta', NULL);
+INSERT INTO `invoices_details` (`uid`, `invoice`, `product`, `quantity`, `unit_value`, `total_iva`) VALUES
+(58, 'A-1', 0001, 2, 100, 0),
+(59, 'A-1', 0002, 50, 500, 0),
+(60, 'A-1', 0003, 50, 600, 0),
+(61, 'A-2', 0004, 5, 200, 19),
+(62, 'A-2', 0005, 5, 300, 19),
+(63, 'A-3', 0001, 5, 100, 0),
+(64, 'A-3', 0002, 5, 500, 0),
+(65, 'A-3', 0003, 5, 600, 0),
+(66, 'A-3', 0006, 5, 400, 0);
 
 -- --------------------------------------------------------
 
@@ -172,6 +195,18 @@ CREATE TABLE `products` (
   `expiration_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `products`
+--
+
+INSERT INTO `products` (`code`, `name`, `stock`, `value`, `iva`, `discount`, `category`, `expiration_date`) VALUES
+(0001, 'Arbeja', 993, 100, '0', 0, 1, '2022-10-25'),
+(0002, 'Frijol', 1945, 500, '0', 0, 1, '2023-11-22'),
+(0003, 'Garbanzo', 3995, 600, '0', 0, 1, '2023-11-22'),
+(0004, 'Cocacola', 495, 200, '19', 0, 2, '2024-09-11'),
+(0005, 'Colombiana', 295, 300, '19', 0, 2, '2024-10-25'),
+(0006, 'Margaritas', 1995, 400, '0', 0, 1, '2021-11-20');
+
 -- --------------------------------------------------------
 
 --
@@ -187,7 +222,7 @@ CREATE TABLE `users` (
   `password` varchar(350) NOT NULL,
   `role` set('Usuario','Administrador') DEFAULT 'Usuario',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `register_number` tinyint(4) DEFAULT NULL
+  `register_number` tinyint(4) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -195,8 +230,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`identity`, `id_type`, `name`, `last_name`, `email`, `password`, `role`, `created_at`, `register_number`) VALUES
-('1098306124', 'TI', 'Brian', 'Castro Bedoya', 'bcastro421@misena.edu.co', 'pbkdf2:sha256:260000$VhSPsUazELCnqAca$1ecf9962fc1a3208a987b4364f420005c5f4cf23dd83d2747649525ae05c9826', 'Usuario', '2021-06-23 00:49:36', 1),
-('41945032', 'CC', 'Yito', 'Caballito', 'test@mail.com', 'pbkdf2:sha256:260000$nFhDPk1UvrfXM7U2$1a939f3f78690fb09625209d6941aef39814764674136d754fdc6bedccc145ba', 'Administrador', '2021-06-23 00:49:36', 1);
+('1098306124', 'TI', 'Brian', 'Castro Bedoya', 'bcastro421@misena.edu.co', 'pbkdf2:sha256:260000$VhSPsUazELCnqAca$1ecf9962fc1a3208a987b4364f420005c5f4cf23dd83d2747649525ae05c9826', 'Usuario', '2021-06-23 00:49:36', 2),
+('41945032', 'CC', 'Yito', 'Caballito', 'test@mail.com', 'pbkdf2:sha256:260000$nFhDPk1UvrfXM7U2$1a939f3f78690fb09625209d6941aef39814764674136d754fdc6bedccc145ba', 'Administrador', '2021-06-23 00:49:36', 2),
+('444444', 'CC', 'Test', 'Testing', 'asd@mail.com', 'pbkdf2:sha256:260000$nE35UwOOp3pwoNV3$ed57568a4c07e6d7308b50ccec027378527872fae6c13bb39cb23f5a7f2ce720', 'Usuario', '2021-07-02 08:28:23', 1);
 
 --
 -- Índices para tablas volcadas
@@ -240,7 +276,8 @@ ALTER TABLE `customers`
 ALTER TABLE `invoices`
   ADD PRIMARY KEY (`uid`),
   ADD KEY `customer` (`customer`),
-  ADD KEY `seller` (`seller`);
+  ADD KEY `seller` (`seller`),
+  ADD KEY `bank` (`bank`);
 
 --
 -- Indices de la tabla `invoices_details`
@@ -248,15 +285,7 @@ ALTER TABLE `invoices`
 ALTER TABLE `invoices_details`
   ADD PRIMARY KEY (`uid`),
   ADD KEY `product` (`product`),
-  ADD KEY `invoice` (`invoice`),
-  ADD KEY `payment` (`payment`);
-
---
--- Indices de la tabla `payment_type`
---
-ALTER TABLE `payment_type`
-  ADD PRIMARY KEY (`code`),
-  ADD KEY `bank` (`bank`);
+  ADD KEY `invoice` (`invoice`);
 
 --
 -- Indices de la tabla `products`
@@ -281,13 +310,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `cart_tmp`
 --
 ALTER TABLE `cart_tmp`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT de la tabla `invoices_details`
 --
 ALTER TABLE `invoices_details`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- Restricciones para tablas volcadas
@@ -308,21 +337,15 @@ ALTER TABLE `invoices`
   ADD CONSTRAINT `invoices_ibfk_2` FOREIGN KEY (`customer`) REFERENCES `customers` (`id`),
   ADD CONSTRAINT `invoices_ibfk_3` FOREIGN KEY (`customer`) REFERENCES `customers` (`id`),
   ADD CONSTRAINT `invoices_ibfk_4` FOREIGN KEY (`customer`) REFERENCES `customers` (`id`),
-  ADD CONSTRAINT `invoices_ibfk_5` FOREIGN KEY (`seller`) REFERENCES `users` (`identity`);
+  ADD CONSTRAINT `invoices_ibfk_5` FOREIGN KEY (`seller`) REFERENCES `users` (`identity`),
+  ADD CONSTRAINT `invoices_ibfk_6` FOREIGN KEY (`bank`) REFERENCES `bank` (`id`);
 
 --
 -- Filtros para la tabla `invoices_details`
 --
 ALTER TABLE `invoices_details`
   ADD CONSTRAINT `invoices_details_ibfk_5` FOREIGN KEY (`product`) REFERENCES `products` (`code`),
-  ADD CONSTRAINT `invoices_details_ibfk_6` FOREIGN KEY (`invoice`) REFERENCES `invoices` (`uid`),
-  ADD CONSTRAINT `invoices_details_ibfk_7` FOREIGN KEY (`payment`) REFERENCES `payment_type` (`code`);
-
---
--- Filtros para la tabla `payment_type`
---
-ALTER TABLE `payment_type`
-  ADD CONSTRAINT `payment_type_ibfk_1` FOREIGN KEY (`bank`) REFERENCES `bank` (`id`);
+  ADD CONSTRAINT `invoices_details_ibfk_6` FOREIGN KEY (`invoice`) REFERENCES `invoices` (`uid`);
 
 --
 -- Filtros para la tabla `products`
