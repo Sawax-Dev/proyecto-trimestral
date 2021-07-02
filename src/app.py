@@ -22,6 +22,10 @@ app.add_url_rule(private["invoicing_route"], view_func=private["invoicing_contro
 app.add_url_rule(private["close-box_route"], view_func=private["close-box_controller"])
 app.add_url_rule(private["config_route"], view_func=private["config_controller"])
 
+#Cash register routes.
+app.add_url_rule(private["cash-register-list_route"], view_func=private["cash-register-list_controller"])
+app.add_url_rule(private["cash-register-edit_route"], view_func=private["cash-register-edit_controller"])
+
 #Invoices routes.
 app.add_url_rule(private["invoices-list_route"], view_func=private["invoices-list_controller"])
 

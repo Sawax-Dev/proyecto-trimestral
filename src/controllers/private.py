@@ -5,6 +5,7 @@ from src.db import mysql
 from src.hooks.roleRequired import role_required
 from src.hooks.loginRequired import login_required
 from src.services.file_service import FileService
+from random import randint, random
 
 class PanelController(MethodView):
     @login_required
@@ -84,34 +85,53 @@ class InvoicingController(MethodView):
     #@login_required
     def post(self, uid):
         payment_type = request.form['payment_type']
-        total_value = float(request.form['total'])
+        total_value = request.form['total']
         customer_pay = float(request.form['customer_pay'])
-        refund = float(request.form['devuelta'])
-        print(payment_type, total_value, customer_pay, refund)
+        refund = request.form['devuelta']
+        
+        #Bank data.
+        bank_name = request.form['bank_name']
+        total_bank = request.form['total_bank']
+        print(bank_name, total_bank)
         
         with mysql.cursor() as cur:
             try:
-                if(payment_type == 'efectivo'):
-                    pass
-                else:
-                    pass
                 cur.execute(f"SELECT invoice, product, quantity, unit_value, total_iva FROM cart_tmp WHERE invoice = '{uid}'")
                 invoice_details = cur.fetchall()
+
                 for i in invoice_details:
-                    cur.execute("INSERT INTO invoices_details(invoice, product, quantity, unit_value, total_iva, payment) VALUES(%s, %s, %s, %s, %s, %s)", (i[0], i[1], i[2], i[3], i[4], payment_type))
+                    cur.execute("INSERT INTO invoices_details(invoice, product, quantity, unit_value, total_iva) VALUES(%s, %s, %s, %s, %s)", (i[0], i[1], i[2], i[3], i[4]))
                     mysql.commit()
+                
                 cur.execute("SELECT SUM(unit_value * quantity) FROM invoices_details WHERE invoice = %s", (uid))
                 total = cur.fetchone()
                 cur.execute("SELECT SUM((unit_value * total_iva * quantity) / 100) FROM invoices_details WHERE invoice = %s", (uid))
                 iva = cur.fetchone()
-                cur.execute("UPDATE invoices SET total_value = %s, total_iva = %s WHERE uid = %s", (total, iva, uid))
-                mysql.commit()
-                cur.execute("UPDATE cash_register SET current_money += %s WHERE number = %s", (total_value-refund, session['user_register_number']))
-                mysql.commit()
+                
+                #Pago con tarjeta
+                if(payment_type == "tarjeta"):
+                    randomId = f"B-{randint(0, 10000)}"
+                    cur.execute("INSERT INTO bank(id, name) VALUES(%s, %s)", (randomId, bank_name))
+                    mysql.commit()
+                    cur.execute("UPDATE invoices SET total_value = %s, total_iva = %s, bank = %s, payment_type = %s WHERE uid = %s", (total_bank, iva, randomId, payment_type, uid))
+                    mysql.commit()
+                    flash('La facturación con tarjeta se ha realizado correctamente.', 'success')
+                
+                #Pago con efectivo.
+                elif(payment_type == "efectivo"):
+                    cur.execute("UPDATE invoices SET total_value = %s, total_iva = %s WHERE uid = %s", (total_value, iva, uid))
+                    mysql.commit()
+                    #cur.execute("UPDATE cash_register SET current_money = %s WHERE number = %s", (total_value-refund, session['user_register_number']))
+                    #mysql.commit()
+                    flash('La facturación con efectivo se ha realizado correctamente.', 'success')
+                else:
+                    flash('El tipo de pago que desea realizar es incorrecto.', 'error')
+                    return redirect(f'/invoicing/{uid}')
+                
                 if(invoice_details):
                     cur.execute("DELETE FROM cart_tmp WHERE invoice = %s", (uid))
                     mysql.commit()
-                flash('La facturación se ha realizado correctamente', 'success')
+                
             except Exception as e:
                 flash(f"{e}", "error")
             return redirect('/panel')
@@ -123,22 +143,25 @@ class CloseBoxController(MethodView):
         date = request.form['date']
         
         with mysql.cursor() as cur:
-            sell_value = []
+            total_cash = []
+            total_bank = []
             total = []
             try:
-                #Efectivo.
-                cur.execute(f"SELECT payment FROM invoices_details WHERE payment = 1")
-                payment_type = cur.fetchall()
-                if(payment_type):
+                cur.execute(f"SELECT * FROM invoices WHERE date LIKE '%{date}%'")
+                daily_invoices = cur.fetchall()
+                if(daily_invoices):
+                    cur.execute(f"SELECT SUM(total_value + total_iva) FROM invoices WHERE date LIKE '%{date}%' AND payment_type = 'efectivo'")
+                    total_cash = cur.fetchone()
+                    cur.execute(f"SELECT SUM(total_value + total_iva) FROM invoices WHERE date LIKE '%{date}%' AND payment_type = 'tarjeta'")
+                    total_bank = cur.fetchone()
                     cur.execute(f"SELECT SUM(total_value + total_iva) FROM invoices WHERE date LIKE '%{date}%'")
-                    sell_value = cur.fetchone()
-                #Total de todo.
-                cur.execute(f"SELECT SUM(total_value + total_iva) FROM invoices WHERE date LIKE '%{date}%'")
-                total = cur.fetchone()
-                print(total)
+                    total = cur.fetchone()
+                    cur.execute("UPDATE cash_register SET base = 0 WHERE number = %s", (session['user_register_number']))
+                    return render_template('private/close.html', total_cash=total_cash, total_bank=total_bank, total=total)
+                flash("No es posible hacer cierre de caja porque no hay facturas realizadas en esta fecha.", "error")
             except Exception as e:
                 flash(f"{e}", "error")
-            return render_template('private/close.html', sell_value=sell_value, total=total)
+            return redirect('/panel')
 
 class PanelDeleteController(MethodView):
     def post(self, id):
@@ -224,7 +247,47 @@ class InvoicesListController(MethodView):
 
 #End invoices controller.
 
-#TODO://ERROR PARA RESOLVER EN MÉTODO GET
+#Cash-registers controller.
+class CashRegistersList(MethodView):
+    @login_required
+    @role_required
+    def get(self):
+        with mysql.cursor() as cur:
+            try:
+                cur.execute("SELECT * FROM cash_register")
+                cash_registers = cur.fetchall()
+            except Exception as e:
+                flash(f"{e}", "error")
+            return render_template('private/cases/list.html', cash_registers=cash_registers)
+    
+    @login_required
+    @role_required
+    def post(self):
+        number = request.form['number']
+        base = request.form['base']
+        
+        with mysql.cursor() as cur:
+            try:
+                cur.execute("INSERT INTO cash_register(number, base) VALUES(%s, %s)", (number, base))
+                mysql.commit()
+                flash(f"Hemos añadido la Caja No ° {number} al sistema", "success")
+            except Exception as e:
+                flash(f"{e}", "error")
+            return redirect('/cash-registers')
+
+class CashRegistersEdit(MethodView):
+    def post(self, number):
+        base = request.form['base']
+        
+        with mysql.cursor() as cur:
+            try:
+                cur.execute("UPDATE cash_register SET base = %s WHERE number = %s", (base, number))
+                mysql.commit()
+                flash(f"Se ha modificado la base de la Caja No ° {number}.", "success")
+            except Exception as e:
+                flash(f"{e}", "error")
+            return redirect('/cash-registers')
+
 class ConfigurationController(MethodView):
     @login_required
     def get(self):
@@ -237,6 +300,7 @@ class ConfigurationController(MethodView):
                 flash(f'{e}', 'error')
             return render_template('private/config.html', user=user)
 
+#Excel file controller.
 class FileController(MethodView):
     
     __fileSvc = FileService()
@@ -262,6 +326,7 @@ class FileController(MethodView):
             else:
                 flash(error, "error")
             return redirect('/')
+#End Excel file controller.
 
 #Users controller
 class UsersListController(MethodView):

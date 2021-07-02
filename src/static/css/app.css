@@ -5,6 +5,8 @@
     --dark-color: rgb(0, 0, 0);
     --light-color: rgb(255, 255, 255);
     --primary-color: rgb(60, 77, 124);
+    --success-color: rgba(16, 145, 16, 0.801);
+    --warning-color: rgb(206, 174, 70);
 }
 
 body {
@@ -54,7 +56,25 @@ nav {
 }
 
 .my-text-green {
-    color: rgb(6, 66, 6);
+    color: var(--primary-color);
+}
+
+.my-alert-green {
+    background: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.my-alert {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.my-alert-warning {
+    background: var(--warning-color);
+    color: white;
+    border-color: var(--warning-color);
 }
 
 .side-nav {

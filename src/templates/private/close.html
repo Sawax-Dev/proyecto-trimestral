@@ -9,9 +9,7 @@
                 <div id="content-close-cash-register" class="justify-content-center align-items-center mx-auto my-5">
                     <p class="h2">Valor efectivo:</p>
                     <div id="details">
-                        <p>Vendido: {{sell_value.0}}</p>
-                        <p>Base: {{session['user_base']}}</p>
-                        <p>Total ganancia = {{sell_value.0 - session['user_base']}}</p>
+                        <p>Vendido: {{total_cash.0 or 'N/A'}}</p>
                     </div>
                 </div>
             </div>
@@ -19,8 +17,7 @@
                 <div id="content-close-cash-register" class="justify-content-center align-items-center mx-auto my-5">
                     <p class="h2">Valor tarjetas:</p>
                     <div id="details">
-                        <p>Vendido: </p>
-                        <p>Total ganancia = </p>
+                        <p>Vendido: {{total_bank.0 or 'N/A'}}</p>
                     </div>
                 </div>
             </div>
@@ -28,7 +25,8 @@
                 <div id="content-close-cash-register" class="justify-content-center align-items-center mx-auto my-5">
                     <p class="h2">Total de venta:</p>
                     <div id="details">
-                        <p class="my-text-green">{{total.0}}</p>
+                        <p class="my-text-green">{{total.0 or 'N/A'}}</p>
+                        <p>Base del día: {{session['user_base']}}</p>
                     </div>
                 </div>
             </div>

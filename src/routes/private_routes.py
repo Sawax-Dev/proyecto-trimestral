@@ -7,6 +7,10 @@ private = {
     "close-box_route": "/close/cash-register", "close-box_controller": CloseBoxController.as_view("close-box"),
     "config_route": "/config", "config_controller": ConfigurationController.as_view("config"),
     
+    #Cash registers routes.
+    "cash-register-list_route": "/cash-registers", "cash-register-list_controller": CashRegistersList.as_view("cash-register-list"),
+    "cash-register-edit_route": "/cash/edit/<int:number>", "cash-register-edit_controller": CashRegistersEdit.as_view("cash-register-edit"),
+    
     #Invoices routes.
     "invoices-list_route": "/invoices", "invoices-list_controller": InvoicesListController.as_view("invoices-list"),
     

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Cajas registradoras{% endblock %}
+{% block content %}
+<section id="cash-registers">
+    <div class="container">
+        <div class="row g-0">
+            <div class="col-lg-12 d-flex">
+                <div id="content-cash-registers" class="justify-content-center align-items-center mx-auto my-5">
+                    <div class="card card-cascade narrower">
+                        <div
+                            class="view view-cascade gradient-card-header bg-dark narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+                            <span class="h3 white-text mx-auto text-center">Cajas registradoras</span>
+                        </div>
+                        <div class="px-4">
+                            <div class="table-wrapper">
+                                <table class="table table-hover mb-0">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th class="th-lg">
+                                                <a>Número
+                                                    <i class="fas fa-sort ml-1"></i>
+                                                </a>
+                                            </th>
+                                            <th class="th-lg">
+                                                <a href="">Dinero actual
+                                                    <i class="fas fa-sort ml-1"></i>
+                                                </a>
+                                            </th>
+                                            <th class="th-lg">
+                                                <a href="">Base
+                                                    <i class="fas fa-sort ml-1"></i>
+                                                </a>
+                                            </th>
+                                            <th class="th-lg">
+                                                <a href="">Fecha de creación
+                                                    <i class="fas fa-sort ml-1"></i>
+                                                </a>
+                                            </th>
+                                            <th class="th-lg">
+                                                <a href="">Acciones
+                                                    <i class="fas fa-sort ml-1"></i>
+                                                </a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        {% for box in cash_registers %}
+                                        <form action="/cash/edit/{{box.0}}" method="POST">
+                                            <tr>
+                                                <td>
+                                                    {{box.0}}
+                                                </td>
+                                                <td>
+                                                    {{box.1}}
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="base" value="{{box.2}}"
+                                                        class="form-control form-control-sm"
+                                                        aria-describedby="describeBase">
+                                                    <small id="describeBase" class="form-text text-muted">Editar y/o
+                                                        asignar base</small>
+                                                </td>
+                                                <td>
+                                                    {{box.3}}
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-save"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </form>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <button class="btn btn-block btn-dark" data-toggle="modal" data-target="#modalLoginForm">
+                                    Crear caja
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Añadir Caja</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <form action="/cash-registers" method="POST">
+                    <div class="md-form mb-5">
+                        <i class="fas fa-cash-register prefix grey-text"></i>
+                        <input type="number" name="number" id="defaultForm-email" placeholder=" Eje. #125" class="form-control validate" autofocus required>
+                        <label data-error="wrong" data-success="right" for="defaultForm-email">Número de caja</label>
+                    </div>
+                    <div class="md-form mb-4">
+                        <i class="fas fa-dollar-sign prefix grey-text"></i>
+                        <input type="number" name="base" id="defaultForm-pass" placeholder=" Eje. 10.000" class="form-control validate" required>
+                        <label data-error="wrong" data-success="right" for="defaultForm-pass">Base de la caja</label>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-lg btn-primary">
+                            Añadir <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

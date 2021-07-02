@@ -190,21 +190,29 @@
                 </div>
                 <form action="/invoicing/{{invoiceData.0}}" method="POST">
                     <div class="form-row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="selectPay">Forma de pago</label>
                             <select name="payment_type" id="selectPay" class="browser-default custom-select form-control">
                                 <option selected disabled>Seleccionar</option>
-                                <option value="1">Efectivo</option>
-                                <option value="2">Banco</option>
+                                <option value="efectivo">Efectivo</option>
+                                <option value="tarjeta">Banco</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="inputTotalValue">Valor total</label>
-                            <input type="text" class="form-control" name="total" value="{{value.0 + iva.0}}" id="inputTotalValue">
+                        <div class="col-md-4 mb-3">
+                            <label for="inputBankName">Nombre del banco</label>
+                            <input type="text" class="form-control" name="bank_name" placeholder="Nombre del banco" id="inputBankName">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="inputTotalBank">Pagar con tarjeta</label>
+                            <input type="text" class="form-control" name="total_bank" placeholder="Total con tarjeta" value="{{value.0 + iva.0}}" id="inputTotalBank">
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
+                            <label for="inputTotalValue">Valor total</label>
+                            <input type="text" class="form-control" name="total" value="{{value.0 + iva.0}}" id="inputTotalValue">
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label for="customerPay">Ingreso</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -213,7 +221,7 @@
                                 <input type="number" class="form-control" name="customer_pay" id="customerPay" placeholder="Valor abonado" aria-describedby="inputGroupPrepend" required>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="inputDevuelta">Devuelta</label>
                             <input type="text" class="form-control" name="devuelta" id="inputDevuelta" placeholder="Valor a devolver" onclick="refund()">
                         </div>
@@ -238,7 +246,7 @@
         let totalValue = document.getElementById('inputTotalValue').value;
         let customerPay = document.getElementById('customerPay').value;
         let result = eval(customerPay - totalValue);
-        devuelta.value = result;
+        devuelta.value = Math.round(result);
     }
 </script>
 {% endblock %}
